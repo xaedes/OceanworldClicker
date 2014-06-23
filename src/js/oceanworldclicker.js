@@ -26,10 +26,11 @@ function updateAll() {
 }
 
 function loop() {
-
+    // calculate water rate
     state.water.rate = 0;
     state.water.rate -= 0.1;
     state.water.rate += 1 * state.water.suppliesEffect * state.water.supplies;
+    // apply water rate
     state.water.current += state.water.rate;
     state.water.current = Math.min(state.water.current, state.water.max);
     updateAll();
