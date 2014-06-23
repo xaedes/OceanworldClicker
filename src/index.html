@@ -6,14 +6,14 @@
     <script type="text/javascript" src="js/libs/sprintf.js"></script>
 </head>
 <body>
-    <table><tr>
-    <td valign="top">
+    <table style="width:100%;"><tr>
+    <td width="50%" valign="top">
         <div> Drinkable Water: <span id="water"></span> / <span id="waterMax"></span> (+<span id="waterRate"></span>/s) </div>
         <div> Water supplies: <span id="waterSupplies"></span> </div>
         <div> <button onclick="swim(); updateResources();")>Swim around</button> </div>
         <div> Plastic: <span id="plastic"></span> <button onclick="increment(state.plastic,1); updatePlastic();")>Gather</button> from <span id="plasticNearby"></span> nearby </div>
     </td>
-    <td valign="top">
+    <td width="50%" valign="top">
         <div id="log"></div>
     </td>
     </table>
