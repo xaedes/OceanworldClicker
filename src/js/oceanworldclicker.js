@@ -16,8 +16,9 @@ state.plastic.current = 0;
 state.plastic.nearby = 10;
 state.water = {};
 state.water.current = 1;
-state.water.current = 1;
-state.water.max = 10;
+state.water.max = {};
+state.water.max.current = 10;
+state.water.max.build = [{'variable':state.water.max,'amount':10},{'variable':state.plastic,'amount':-10}];
 state.water.supplies = {};
 state.water.supplies.current = 1;
 state.water.supplies.name = "supplies";
@@ -41,7 +42,7 @@ function log(msg) {
 
 function updateWater() {
     setFloat("water",state.water.current);
-    setFloat("waterMax",state.water.max);
+    setFloat("waterMax",state.water.max.current);
     setInt("waterSupplies",state.water.supplies.current);
     setFloat("waterRate",state.water.rate);
 }
@@ -60,13 +61,16 @@ function updateAll() {
 }
 
 function increment(variable, incr) {
-    if(variable.hasOwnProperty("nearby")) {
-        incr = Math.min(incr,variable.nearby);
-        variable.nearby -= incr;
-    }
-    variable.current += incr;
-    if(variable.hasOwnProperty("max")) {
-        variable.current = Math.min(variable.current, variable.max);
+    if(!isNaN(incr)){
+        if(variable.hasOwnProperty("nearby")) {
+            incr = Math.min(incr,variable.nearby);
+            variable.nearby -= incr;
+        }
+
+        variable.current += incr;
+        if(variable.hasOwnProperty("max")) {
+            variable.current = Math.min(variable.current, variable.max.current);
+        }
     }
 }
 function decrement(variable, decr) {
