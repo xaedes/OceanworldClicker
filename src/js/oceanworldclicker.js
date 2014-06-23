@@ -8,12 +8,17 @@ function setFloat(id,flt) {
 
 state = {};
 state.water = {};
-state.water.current = 100;
-state.water.max = 100;
+state.water.current = 1;
+state.water.max = 10;
+state.water.supplies = 1;
+state.water.suppliesEffect = 1;
+state.water.rate = 0;
 
 function updateWater() {
     setFloat("water",state.water.current);
     setFloat("waterMax",state.water.max);
+    setFloat("waterSupplies",state.water.supplies);
+    setFloat("waterRate",state.water.rate);
 }
 
 function updateAll() {
@@ -21,7 +26,12 @@ function updateAll() {
 }
 
 function loop() {
-    state.water.current -= 0.1;
+
+    state.water.rate = 0;
+    state.water.rate -= 0.1;
+    state.water.rate += 1 * state.water.suppliesEffect * state.water.supplies;
+    state.water.current += state.water.rate;
+    state.water.current = Math.min(state.water.current, state.water.max);
     updateAll();
 }
 
