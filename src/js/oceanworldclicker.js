@@ -19,6 +19,13 @@ state.water.rate = 0;
 state.plastic = {};
 state.plastic.current = 0;
 state.plastic.nearby = 10;
+state.log = []
+
+function log(msg) {
+    state.log.push(msg);
+    console.log(msg);
+    document.getElementById("log").innerHTML += "<div>" + msg + "</div>";
+}
 
 function updateWater() {
     setFloat("water",state.water.current);
@@ -37,6 +44,7 @@ function updateResources() {
 function updateAll() {
     updateWater();
     updatePlastic();
+    updateLog();
 }
 
 function increment(variable, incr) {
@@ -56,6 +64,7 @@ function random(min,max) {
     return Math.random() * (max-min) + min;
 }
 function swim() {
+    log("Found new resources");
     state.plastic.nearby = random(10-5,10+5);
 }
 
