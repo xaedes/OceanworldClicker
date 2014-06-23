@@ -6,3 +6,6 @@ server:
 tab2space:
 	find src/js/ -iname *.js -exec sed -i s/'\t'/'    '/g '{}' \;
 
+sprintf-1.0.0:
+	# get from github
+	cd src/js/libs && wget https://raw.githubusercontent.com/alexei/sprintf.js/1.0.0/src/sprintf.js
