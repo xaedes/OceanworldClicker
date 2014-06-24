@@ -43,6 +43,9 @@ function defineDefaultData(state) {
     state.population.max.current = 2;
     state.population.waterConsumation = -0.1;
     state.population.findSurvivorProbability = 0.1;
+    state.population.unemployed = {};
+    state.population.unemployed.current = 0;
+
 
     state.plastic = {};
     state.plastic.name = "plastic";
@@ -71,6 +74,16 @@ function defineDefaultData(state) {
     state.water.reservoirs.current = 1;
     state.water.reservoirs.effect = 10;
 
+    state.plastic.rate = {};
+    state.plastic.rate.current = 0;
+
+    state.plastic.gatherer = {};
+    state.plastic.gatherer.current = 0;
+    state.plastic.gatherer.effect = 1;
+    state.plastic.gatherer.max = {};
+    state.plastic.gatherer.max.current = 0;
+
+
     return state;
 }
 function getDefaultData() {
@@ -89,12 +102,15 @@ function defineBuilds(state) {
 function defineCalculations(state) {
     old = function(val) {return val;};
     zero = function(val) {return 0;};
-    value = function(value, val) {return 0;};
+    value = function(value, val) {return getValue(value);};
     add_to = function(add_variable,add_weight,val) {return val+getValue(add_variable)*getValue(add_weight)};
+    sub_from = function(sub_variable,sub_weight,val) {return val-getValue(sub_variable)*getValue(sub_weight)};
     incr = function(val) {return val+1;};
     decr = function(val) {return val-1;};
     add_gaussian = function(variance_variable,scale_variable,val) {return val+gaussian(getValue(variance_variable)*getValue(scale_variable))};
     modulo = function(div,val) {return val % getValue(div)};
+    min = function(other_val, val) {return Math.min(getValue(other_val),val);};
+    max = function(other_val, val) {return Math.max(getValue(other_val),val);};
 
     state.water.rate.calculate = zero; // begin with zero (omit old value)
     state.water.rate.calculate = _.compose(_.partial(add_to, state.population, state.population.waterConsumation), state.water.rate.calculate);
@@ -106,13 +122,29 @@ function defineCalculations(state) {
     state.water.calculate = old;
     state.water.calculate = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate);
 
-    state.plastic.nearby.calculate = zero;
-    state.plastic.nearby.calculate = _.compose(_.partial(add_to, state.sight, state.plastic.density), state.plastic.nearby.calculate);
-    state.plastic.nearby.calculate = _.compose(_.partial(add_gaussian, state.sight.variance, state.plastic.density), state.plastic.nearby.calculate);
+    state.plastic.nearby.calculate_swim = zero;
+    state.plastic.nearby.calculate_swim = _.compose(_.partial(add_to, state.sight, state.plastic.density), state.plastic.nearby.calculate_swim);
+    state.plastic.nearby.calculate_swim = _.compose(_.partial(add_gaussian, state.sight.variance, state.plastic.density), state.plastic.nearby.calculate_swim);
 
     state.autosave.counter.calculate = old;
     state.autosave.counter.calculate = _.compose(incr, state.autosave.counter.calculate);
     state.autosave.counter.calculate = _.compose(_.partial(modulo, state.autosave.counter.max), state.autosave.counter.calculate);
+    
+    state.plastic.rate.calculate = zero;
+    state.plastic.rate.calculate = _.compose(_.partial(add_to, state.plastic.gatherer, state.plastic.gatherer.effect), state.plastic.rate.calculate);
+    state.plastic.rate.calculate = _.compose(_.partial(min, state.plastic.nearby), state.plastic.rate.calculate);
+
+    state.plastic.calculate = old;
+    state.plastic.calculate = _.compose(_.partial(add_to, state.plastic.rate, 1), state.plastic.calculate);
+
+    state.population.unemployed.calculate = _.partial(value, state.population);
+    state.population.unemployed.calculate = _.compose(_.partial(sub_from, state.plastic.gatherer, 1), state.population.unemployed.calculate);
+
+    state.plastic.gatherer.max.calculate = _.partial(value, state.population.unemployed);
+    state.plastic.gatherer.max.calculate = _.compose(_.partial(add_to, state.plastic.gatherer, 1), state.plastic.gatherer.max.calculate);
+
+    state.plastic.nearby.calculate = old;
+    state.plastic.nearby.calculate = _.compose(_.partial(sub_from, state.plastic.rate, 1), state.plastic.nearby.calculate);
 
     return state;
 }
@@ -206,6 +238,7 @@ function displayWater() {
 }
 function displayPlastic() {
     setInt("plastic",getValue(state.plastic));
+    setFloat("plasticRate",getValue(state.plastic.rate));
     setInt("plasticNearby",getValue(state.plastic.nearby));
 }
 function displayResources() {
@@ -229,11 +262,16 @@ function displayPopulation() {
     setInt("population",getValue(state.population));
     setInt("populationMax",getValue(state.population.max));
 }
+function displayJobs() {
+    setInt("unemployed",getValue(state.population.unemployed));
+    setInt("plasticGatherer",getValue(state.plastic.gatherer));
+}
 function displayAll() {
     displayWater();
     displayResources();
     displayBuildings();
     displayPopulation();
+    displayJobs();
     // displayLog();
 }
 
@@ -290,13 +328,13 @@ function build(recipe, n) {
 function swim() {
     log("Swimming to another area..");
     log("Found new resources");
-    // state.plastic.nearby = random(10-5,10+5);
-    apply_calculate(state.plastic.nearby);
+    apply_calculate_suffix(state.plastic.nearby,"swim");
+
     if(Math.random() < state.population.findSurvivorProbability) {
         log("Found new survivor!");
         if(getValue(state.population.max)-getValue(state.population) > 0){
-            increment(state.population, 1);
             log("The survivor joined you!");
+            increment(state.population, 1);
         } else {
             log("Too bad you have not enough space on board.");
         }
@@ -306,6 +344,11 @@ function swim() {
 function apply_calculate(variable) {
     if(variable.hasOwnProperty("calculate")){
         setValue(variable, variable.calculate(getValue(variable)));
+    }
+}
+function apply_calculate_suffix(variable,suffix) {
+    if(variable.hasOwnProperty("calculate_"+suffix)){
+        setValue(variable, variable["calculate_"+suffix](getValue(variable)));
     }
 }
 
@@ -332,6 +375,11 @@ function loop() {
     apply_calculate(state.water.rate);
     apply_calculate(state.water);
     apply_calculate(state.autosave.counter);
+    apply_calculate(state.plastic.rate);
+    apply_calculate(state.plastic.nearby);
+    apply_calculate(state.plastic);
+    apply_calculate(state.population.unemployed);
+    apply_calculate(state.plastic.gatherer.max);
 
     // Display
     displayAll();

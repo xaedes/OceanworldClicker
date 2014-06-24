@@ -35,7 +35,7 @@
             <tr>
                 <td><button onclick="increment(state.plastic,1); displayPlastic();")>Gather</button></td>
                 <td>Plastic: </td>
-                <td><span id="plastic"></span></td>
+                <td><span id="plastic"></span> (+<span id="plasticRate"></span>/s)</td>
                 <td>from <span id="plasticNearby"></span> nearby</td>
             </tr>
         </table>
@@ -58,6 +58,21 @@
                 <td>Water Supplies: </td>
                 <td><span id="waterSupplies"></span></td>
                 <td><span id="waterSuppliesCost"></span>: +<span id="waterSuppliesEffect"></span> water/s</td>
+            </tr>
+        </table>
+        <h2>Jobs</h2>
+        <table style="width:100%" id="jobs">
+            <tr>
+                <td></td>
+                <td>Unemployed: </td>
+                <td><span id="unemployed"></span></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><button onclick="decrement(state.plastic.gatherer,1); apply_calculate(state.plastic.rate); apply_calculate(state.population.unemployed); displayPlastic(); displayJobs();")>&lt;</button></td>
+                <td>Plastic Gatherer: </td>
+                <td><span id="plasticGatherer"></span></td>
+                <td><button onclick="increment(state.plastic.gatherer,1); apply_calculate(state.plastic.rate); apply_calculate(state.population.unemployed); displayPlastic(); displayJobs();")>&gt;</button></td>
             </tr>
         </table>
     </td>
