@@ -9,6 +9,8 @@
 <body>
     <table style="width:100%;"><tr>
     <td width="50%" valign="top">
+        <h1>OceanWorld</h1> 
+        <h2>Basic Resources</h2>
         <table style="width:100%" id="buildings">
             <tr>
                 <td>Drinkable Water:</td>
@@ -21,7 +23,22 @@
         </table>
 
         <div> <button onclick="swim(); displayAll();")>Swim around</button> </div>
-        <div> Plastic: <span id="plastic"></span> <button onclick="increment(state.plastic,1); displayPlastic();")>Gather</button> from <span id="plasticNearby"></span> nearby </div>
+        <h2>Special Resources</h2>
+        <table style="width:100%" id="resources">
+            <colgroup>
+                <col width="15%"></col>
+                <col width="25%"></col>
+                <col width="15%"></col>
+                <col width="45%"></col>
+            </colgroup>
+            <tr>
+                <td><button onclick="increment(state.plastic,1); displayPlastic();")>Gather</button></td>
+                <td>Plastic: </td>
+                <td><span id="plastic"></span></td>
+                <td>from <span id="plasticNearby"></span> nearby</td>
+            </tr>
+        </table>
+        <h2>Buildings</h2>
         <table style="width:100%" id="buildings">
             <colgroup>
                 <col width="15%"></col>

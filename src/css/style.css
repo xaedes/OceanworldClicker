@@ -3,6 +3,14 @@ body {
     font-family: opensans, sans, Arial;
 }
 
+h1 {
+    font-size: 1.4em;
+}
+
+h2 {
+    font-size: 1.0em;
+}
+
 #log {
     border: 1px solid black;
     padding: 5px;
