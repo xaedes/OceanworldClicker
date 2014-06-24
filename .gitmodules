@@ -4,3 +4,6 @@
 [submodule "src/js/dist/underscore"]
 	path = src/js/dist/underscore
 	url = git@github.com:jashkenas/underscore.git
+[submodule "src/js/dist/lzstring"]
+	path = src/js/dist/lzstring
+	url = https://github.com/pieroxy/lz-string/
