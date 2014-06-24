@@ -125,6 +125,7 @@ function defineCalculations(state) {
     state.plastic.nearby.calculate_swim = zero;
     state.plastic.nearby.calculate_swim = _.compose(_.partial(add_to, state.sight, state.plastic.density), state.plastic.nearby.calculate_swim);
     state.plastic.nearby.calculate_swim = _.compose(_.partial(add_gaussian, state.sight.variance, state.plastic.density), state.plastic.nearby.calculate_swim);
+    state.plastic.nearby.calculate_swim = _.compose(Math.floor, state.plastic.nearby.calculate_swim);
 
     state.autosave.counter.calculate = old;
     state.autosave.counter.calculate = _.compose(incr, state.autosave.counter.calculate);
