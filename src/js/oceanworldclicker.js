@@ -8,6 +8,15 @@ function setFloat(id,value) {
 function setInt(id,value) {
     setInnerHTML(id,sprintf("%d",value));
 }
+function setCost(id,build,ignore) {
+    var s = _.map(
+        _.filter(
+            build, 
+            function (a) { return a.variable !== ignore; }),
+        function(a) {return sprintf("%d %s",-a.amount,a.variable.name);})
+        .join(", ");
+    setInnerHTML(id,s);
+}
 
 state = {};
 state.plastic = {};
@@ -18,13 +27,21 @@ state.water = {};
 state.water.current = 1;
 state.water.max = {};
 state.water.max.current = 10;
-state.water.max.build = [{'variable':state.water.max,'amount':10},{'variable':state.plastic,'amount':-10}];
+state.water.max.summands = []; // calculate current from the sum of all summands
 state.water.supplies = {};
 state.water.supplies.current = 1;
 state.water.supplies.name = "supplies";
 state.water.supplies.effect = 1;
 state.water.supplies.build = [{'variable':state.water.supplies,'amount':1},{'variable':state.plastic,'amount':-10}];
 state.water.rate = 0;
+
+state.water.reservoirs = {};
+state.water.max.summands.push(state.water.reservoirs);
+state.water.reservoirs.name = "Water reservoir";
+state.water.reservoirs.current = 1;
+state.water.reservoirs.effect = 10;
+state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1},{'variable':state.plastic,'amount':-10}];
+
 
 state.log = []
 // For the time now
@@ -54,28 +71,59 @@ function updateResources() {
     updatePlastic();
 }
 
-function updateAll() {
-    updateWater();
-    updatePlastic();
-    // updateLog();
+function updateWaterReservoirs() {
+    setInt("waterReservoirs", state.water.reservoirs.current);
+    setInt("waterReservoirsEffect", state.water.reservoirs.effect);
+    setCost("waterReservoirsCost", state.water.reservoirs.build, state.water.reservoirs);
 }
 
+function updateAll() {
+    updateWater();
+    updateResources();
+    updateWaterReservoirs();
+    // updateLog();
+}
+function getValue(variable) {
+    if(variable.hasOwnProperty("current")) {
+        return variable.current;
+    }
+}
+
+function setValue(variable, value) {
+    if(variable.hasOwnProperty("current")) {
+        variable.current = value;
+        if(variable.hasOwnProperty("max")) {
+            variable.current = Math.min(variable.current, variable.max.current);
+        }    
+    }
+}
 function increment(variable, incr) {
     if(!isNaN(incr)){
-        if(variable.hasOwnProperty("nearby")) {
+        if(variable.hasOwnProperty("nearby") && (incr > 0)) {
             incr = Math.min(incr,variable.nearby);
             variable.nearby -= incr;
         }
-
-        variable.current += incr;
-        if(variable.hasOwnProperty("max")) {
-            variable.current = Math.min(variable.current, variable.max.current);
-        }
+        setValue(variable, getValue(variable) + incr);
     }
 }
 function decrement(variable, decr) {
     increment(variable, -decr);
 }
+
+function apply_summands(variable) {
+    if(variable.hasOwnProperty("current") && variable.hasOwnProperty("summands")) {
+        var sum = 0;
+        for (var i = variable.summands.length - 1; i >= 0; i--) {
+            var v = getValue(variable.summands[i]);
+            if(variable.summands[i].hasOwnProperty("effect")) {
+                v *= variable.summands[i].effect;
+            }
+            sum += v;
+        };
+        setValue(variable, sum);
+    }
+}
+
 function build(recipe, n) {
     var applicable = true;
     for (var i = recipe.length - 1; i >= 0; i--) {
@@ -100,6 +148,7 @@ function swim() {
 }
 
 function loop() {
+    apply_summands(state.water.max);
     // calculate water rate
     state.water.rate = 0;
     state.water.rate -= 0.1;

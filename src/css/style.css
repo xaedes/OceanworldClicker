@@ -10,3 +10,21 @@ body {
     height: 300px;
     overflow: auto;
 }
+
+#buildings td {
+    margin: 5px;
+}
+
+#buildings td:nth-child(1) {
+    
+}
+#buildings td:nth-child(2) {
+    text-align: left;
+}
+#buildings td:nth-child(3) {
+    text-align: right;
+}
+#buildings td:nth-child(4) {
+    padding-left: 50px;
+    text-align: left;
+}
