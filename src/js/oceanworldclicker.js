@@ -143,7 +143,7 @@ function displayAll() {
 // data handling functions ========================================================================
 
 function getValue(variable) {
-    if(typeof variable == 'number') {
+    if(_.isNumber(variable)) {
         return variable;
     }
     if(variable.hasOwnProperty("current")) {
