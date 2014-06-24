@@ -22,7 +22,10 @@ function setCost(id,build,ignore) {
 state = {};
 state.population = {};
 state.population.current = 1;
+state.population.max = {};
+state.population.max.current = 2;
 state.population.waterConsumation = -0.1;
+state.population.findSurvivorProbability = 0.1;
 
 state.plastic = {};
 state.plastic.name = "plastic";
@@ -79,37 +82,41 @@ function log(msg) {
 }
 
 function displayWater() {
-    setFloat("water",state.water.current);
-    setFloat("waterMax",state.water.max.current);
-    setInt("waterSupplies",state.water.supplies.current);
-    setFloat("waterRate",state.water.rate.current);
+    setFloat("water",getValue(state.water));
+    setFloat("waterMax",getValue(state.water.max));
+    setInt("waterSupplies",getValue(state.water.supplies));
+    setFloat("waterRate",getValue(state.water.rate));
 }
 function displayPlastic() {
-    setInt("plastic",state.plastic.current);
-    setInt("plasticNearby",state.plastic.nearby);
+    setInt("plastic",getValue(state.plastic));
+    setInt("plasticNearby",getValue(state.plastic.nearby));
 }
 function displayResources() {
     displayPlastic();
 }
 function displayWaterSupplies() {
-    setInt("waterSupplies", state.water.supplies.current);
-    setInt("waterSuppliesEffect", state.water.supplies.effect);
+    setInt("waterSupplies", getValue(state.water.supplies));
+    setInt("waterSuppliesEffect", getValue(state.water.supplies.effect));
     setCost("waterSuppliesCost", state.water.supplies.build, state.water.supplies);
 }
 function displayWaterReservoirs() {
-    setInt("waterReservoirs", state.water.reservoirs.current);
-    setInt("waterReservoirsEffect", state.water.reservoirs.effect);
+    setInt("waterReservoirs", getValue(state.water.reservoirs));
+    setInt("waterReservoirsEffect", getValue(state.water.reservoirs.effect));
     setCost("waterReservoirsCost", state.water.reservoirs.build, state.water.reservoirs);
 }
 function displayBuildings() {
     displayWaterSupplies();
     displayWaterReservoirs();
 }
-
+function displayPopulation() {
+    setInt("population",getValue(state.population));
+    setInt("populationMax",getValue(state.population.max));
+}
 function displayAll() {
     displayWater();
     displayResources();
     displayBuildings();
+    displayPopulation();
     // displayLog();
 }
 function getValue(variable) {
@@ -164,6 +171,10 @@ function random(min,max) {
 function swim() {
     log("Found new resources");
     state.plastic.nearby = random(10-5,10+5);
+    if(Math.random() < state.population.findSurvivorProbability) {
+        log("Found new survivor!");
+        increment(state.population, 1);
+    }
 }
 
 function apply_calculate(variable) {
