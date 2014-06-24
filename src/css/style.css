@@ -14,7 +14,7 @@ h2 {
 #log {
     border: 1px solid black;
     padding: 5px;
-    width: 500px;
+    width: 99%;
     height: 300px;
     overflow: auto;
 }
