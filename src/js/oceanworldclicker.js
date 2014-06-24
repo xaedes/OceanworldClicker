@@ -1,4 +1,4 @@
-// set html elements
+// set html elements ==============================================================================
 function setInnerHTML(id,html) {
     document.getElementById(id).innerHTML = html;
 }
@@ -18,7 +18,7 @@ function setCost(id,build,ignore) {
     setInnerHTML(id,s);
 }
 
-// define data
+// Define data ====================================================================================
 state = {};
 state.population = {};
 state.population.current = 1;
@@ -52,7 +52,7 @@ state.water.reservoirs.current = 1;
 state.water.reservoirs.effect = 10;
 state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1},{'variable':state.plastic,'amount':-10}];
 
-// define calculations 
+// Define calculations  ===========================================================================
 old = function(val) {return val;};
 zero = function(val) {return 0;};
 add_to = function(add_variable,add_weight,val) {return val+getValue(add_variable)*getValue(add_weight)};
@@ -67,6 +67,7 @@ state.water.max.calculate = _.compose(_.partial(add_to, state.water.reservoirs, 
 state.water.calculate = old;
 state.water.calculate = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate);
 
+// Logging ========================================================================================
 state.log = []
 // For the time now
 // http://stackoverflow.com/a/10211214/798588
@@ -80,7 +81,7 @@ function log(msg) {
     date = new Date().timeNow()
     document.getElementById("log").innerHTML = "<div>" + date + " " + msg + "</div>" + document.getElementById("log").innerHTML;
 }
-
+// display functions ==============================================================================
 function displayWater() {
     setFloat("water",getValue(state.water));
     setFloat("waterMax",getValue(state.water.max));
@@ -119,6 +120,9 @@ function displayAll() {
     displayPopulation();
     // displayLog();
 }
+
+// data handling functions ========================================================================
+
 function getValue(variable) {
     if(typeof variable == 'number') {
         return variable;
@@ -182,6 +186,8 @@ function apply_calculate(variable) {
         setValue(variable, variable.calculate(getValue(variable)));
     }
 }
+
+// game loop ======================================================================================
 
 function loop() {
     apply_calculate(state.water.max);
