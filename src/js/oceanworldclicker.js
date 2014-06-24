@@ -1,4 +1,4 @@
-
+// set html elements
 function setInnerHTML(id,html) {
     document.getElementById(id).innerHTML = html;
 }
@@ -12,16 +12,13 @@ function setCost(id,build,ignore) {
     var s = _.map(
         _.filter(
             build, 
-            function (a) { return a.variable !== ignore; }),
+            function (a) { return a.variable !== ignore; }), // filter out ignore 
         function(a) {return sprintf("%d %s",-a.amount,a.variable.name);})
         .join(", ");
     setInnerHTML(id,s);
 }
 
-old = function(val) {return val;};
-zero = function(val) {return 0;};
-add_to = function(add_variable,add_weight,val) {return val+getValue(add_variable)*getValue(add_weight)};
-
+// define data
 state = {};
 state.population = {};
 state.population.current = 1;
@@ -33,14 +30,11 @@ state.plastic.current = 0;
 state.plastic.nearby = 10;
 state.water = {};
 state.water.current = 1;
-state.water.calculate = old;
 state.water.max = {};
 state.water.max.current = 10;
-state.water.max.calculate = zero; // begin with zero (omit old value)
 
 state.water.rate = {};
 state.water.rate.current = 0;
-state.water.rate.calculate = zero; // begin with zero (omit old value)
 
 state.water.supplies = {};
 state.water.supplies.current = 1;
@@ -56,11 +50,18 @@ state.water.reservoirs.effect = 10;
 state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1},{'variable':state.plastic,'amount':-10}];
 
 // define calculations 
+old = function(val) {return val;};
+zero = function(val) {return 0;};
+add_to = function(add_variable,add_weight,val) {return val+getValue(add_variable)*getValue(add_weight)};
+
+state.water.rate.calculate = zero; // begin with zero (omit old value)
 state.water.rate.calculate = _.compose(_.partial(add_to, state.population, state.population.waterConsumation), state.water.rate.calculate);
 state.water.rate.calculate = _.compose(_.partial(add_to, state.water.supplies, state.water.supplies.effect), state.water.rate.calculate);
 
+state.water.max.calculate = zero; // begin with zero (omit old value)
 state.water.max.calculate = _.compose(_.partial(add_to, state.water.reservoirs, state.water.reservoirs.effect), state.water.max.calculate);
 
+state.water.calculate = old;
 state.water.calculate = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate);
 
 state.log = []
@@ -110,9 +111,6 @@ function displayAll() {
     displayResources();
     displayBuildings();
     // displayLog();
-}
-function copy(variable) {
-
 }
 function getValue(variable) {
     if(typeof variable == 'number') {
