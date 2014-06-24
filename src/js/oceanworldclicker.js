@@ -112,7 +112,7 @@ function getDefaultData() {
 // Define buildings  ==============================================================================
 function defineBuilds(state) {
     state.water.supplies.build = [{'variable':state.water.supplies,'amount':1},{'variable':state.plastic,'amount':-10}];
-    state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1},{'variable':state.plastic,'amount':-10}];
+    state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1},{'variable':state.plastic,'amount':-10},{'variable':state.planks,'amount':-1}];
     return state;
 }
 
