@@ -71,7 +71,6 @@ function defineDefaultData(state) {
     state.water.reservoirs.current = 1;
     state.water.reservoirs.effect = 10;
 }
-defineDefaultData(state);
 
 // Define buildings  ==============================================================================
 function defineBuilds(state) {
@@ -121,10 +120,9 @@ function defineNonData(state) {
     return state;
 }
 
-defineNonData(state);
 
 // Logging ========================================================================================
-state.log = []
+
 // For the time now
 // http://stackoverflow.com/a/10211214/798588
 Date.prototype.timeNow = function () {
@@ -165,12 +163,12 @@ function deserialize(compressed) {
 
 function load() {
     state = deserialize(localStorage.getItem('state'));
+    log("Loaded game");
 }
 function save() {
     localStorage.setItem('state', serialize(state));
 
 }
-load();
 
 function log(msg) {
     state.log.push(msg);
@@ -285,6 +283,17 @@ function apply_calculate(variable) {
     }
 }
 
+
+function resetGameNoLog() {
+    defineDefaultData(state);
+    defineNonData(state);
+    apply_calculate(state.plastic.nearby);
+}
+function resetGame() {
+    resetGameNoLog();
+    log("Resetting game");
+}
+
 // game loop ======================================================================================
 function loop() {
     // Autosave
@@ -302,6 +311,8 @@ function loop() {
     displayAll();
 }
 
-apply_calculate(state.plastic.nearby);
+resetGameNoLog();
+load();
 displayAll();
+
 loop_interval = window.setInterval(loop, 1000);

@@ -36,3 +36,7 @@ h2 {
     padding-left: 50px;
     text-align: left;
 }
+
+#resetGame {
+    float: right;
+}
