@@ -16,11 +16,10 @@ function setInt(id,value) {
     setInnerHTML(id,sprintf("%d",value));
 }
 function setCost(id,build,ignore) {
-    var s = _.map(
-        _.filter(
-            build, 
-            function (a) { return a.variable !== ignore; }), // filter out ignore 
-        function(a) {return sprintf("%d %s",-a.amount,a.variable.name);})
+    var s = _.chain(build)
+        .filter(function (a) { return a.variable !== ignore; })
+        .map(function(a) {return sprintf("%d %s",-a.amount,a.variable.name);})
+        .value()
         .join(", ");
     setInnerHTML(id,s);
 }
