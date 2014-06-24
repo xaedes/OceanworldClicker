@@ -23,6 +23,19 @@ function setCost(id,build,ignore) {
         .join(", ");
     setInnerHTML(id,s);
 }
+function setEnabled(id) {
+    document.getElementById(id).disabled = false;
+}
+function setDisabled(id) {
+    document.getElementById(id).disabled = true;
+}
+function setClickableBuild(id, building, n, available) {
+    if(isBuildApplicable(building.build, n, available)) {
+        setEnabled(id);
+    } else {
+        setDisabled(id);
+    }
+}
 
 // Define data ====================================================================================
 state = {};
@@ -32,6 +45,11 @@ function defineDefaultData(state) {
     state.autosave.counter = {};
     state.autosave.counter.current = 0;
     state.autosave.counter.max = 60; // every minute
+
+    state.space = {};
+    state.space.current = 10;
+    state.space.available = {};
+    state.space.available.current = 10;
 
     state.sight = {};
     state.sight.current = 1;
@@ -94,12 +112,14 @@ function defineDefaultData(state) {
     state.water.supplies.current = 1;
     state.water.supplies.name = "supplies";
     state.water.supplies.effect = 1;
+    state.water.supplies.size = 1;
 
 
     state.water.reservoirs = {};
     state.water.reservoirs.name = "Water reservoir";
     state.water.reservoirs.current = 1;
     state.water.reservoirs.effect = 10;
+    state.water.reservoirs.size = 1;
 
 
 
@@ -111,8 +131,8 @@ function getDefaultData() {
 
 // Define buildings  ==============================================================================
 function defineBuilds(state) {
-    state.water.supplies.build = [{'variable':state.water.supplies,'amount':1},{'variable':state.plastic,'amount':-10}];
-    state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1},{'variable':state.plastic,'amount':-10},{'variable':state.planks,'amount':-1}];
+    state.water.supplies.build = [{'variable':state.water.supplies,'amount':1,'building':true},{'variable':state.plastic,'amount':-10}];
+    state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1,'building':true},{'variable':state.plastic,'amount':-10},{'variable':state.planks,'amount':-1}];
     return state;
 }
 
@@ -170,6 +190,14 @@ function defineCalculations(state) {
     }
     defineCalculationsResourceGatherer(state.plastic);
     defineCalculationsResourceGatherer(state.planks);
+
+    // state.space.calculate = zero;
+    // state.space.calculate = _.compose(_.partial(add_to, state.water.reservoirs, state.water.reservoirs.size), state.space.calculate);
+    // state.space.calculate = _.compose(_.partial(add_to, state.water.supplies, state.water.supplies.size), state.space.calculate);
+
+    state.space.available.calculate = _.partial(value,state.space);
+    state.space.available.calculate = _.compose(_.partial(sub_from, state.water.reservoirs, state.water.reservoirs.size), state.space.available.calculate);
+    state.space.available.calculate = _.compose(_.partial(sub_from, state.water.supplies, state.water.supplies.size), state.space.available.calculate);
 
     return state;
 }
@@ -275,17 +303,24 @@ function displayResources() {
     displayPlastic();
     displayPlanks();
 }
+function displaySpace() {
+    setInt("space",getValue(state.space));
+    setInt("availableSpace",getValue(state.space.available));
+}
 function displayWaterSupplies() {
+    setClickableBuild("buildWaterSupplies", state.water.supplies, 1, state.space.available);
     setInt("waterSupplies", getValue(state.water.supplies));
     setInt("waterSuppliesEffect", getValue(state.water.supplies.effect));
     setCost("waterSuppliesCost", state.water.supplies.build, state.water.supplies);
 }
 function displayWaterReservoirs() {
+    setClickableBuild("buildWaterReservoirs", state.water.reservoirs, 1, state.space.available);
     setInt("waterReservoirs", getValue(state.water.reservoirs));
     setInt("waterReservoirsEffect", getValue(state.water.reservoirs.effect));
     setCost("waterReservoirsCost", state.water.reservoirs.build, state.water.reservoirs);
 }
 function displayBuildings() {
+    displaySpace();
     displayWaterSupplies();
     displayWaterReservoirs();
 }
@@ -344,7 +379,7 @@ function decrement(variable, decr) {
     increment(variable, -decr);
 }
 
-function build(recipe, n) {
+function isBuildApplicable(recipe, n, available) {
     var applicable = true;
     for (var i = recipe.length - 1; i >= 0; i--) {
         console.log(recipe[i]);
@@ -352,12 +387,25 @@ function build(recipe, n) {
             applicable = false;
             break;
         }
+        if (recipe[i].hasOwnProperty("building") && recipe[i].building==true && recipe[i].variable.hasOwnProperty("size") ) {
+            // check size
+            if( recipe[i].variable.size * recipe[i].amount > getValue(available) ) {
+                applicable = false;
+                break;
+            }
+        }
     }
-    if(applicable) {
+    return applicable;    
+}
+
+function build(recipe, n) {
+    if(isBuildApplicable(recipe,n,state.space.available)) {
         for (var i = recipe.length - 1; i >= 0; i--) {
             increment(recipe[i].variable,recipe[i].amount);
         }
+        return true;
     }
+    return false;
 }
 
 function swim() {
@@ -422,6 +470,7 @@ function loop() {
     apply_calculate(state.population.unemployed);
     apply_calculate(state.plastic.gatherer.max);
     apply_calculate(state.planks.gatherer.max);
+    apply_calculate(state.space.available);
 
     // Display
     displayAll();
@@ -432,3 +481,4 @@ load();
 displayAll();
 
 loop_interval = window.setInterval(loop, 1000);
+loop();

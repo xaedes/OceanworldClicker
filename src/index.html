@@ -33,13 +33,13 @@
                 <col width="45%"></col>
             </colgroup>
             <tr>
-                <td><button onclick="increment(state.plastic,1); displayPlastic();")>Gather</button></td>
+                <td><button onclick="increment(state.plastic,1); displayPlastic(); displayBuildings();")>Gather</button></td>
                 <td>Plastic: </td>
                 <td><span id="plastic"></span> (+<span id="plasticRate"></span>/s)</td>
                 <td>from <span id="plasticNearby"></span> nearby</td>
             </tr>
             <tr>
-                <td><button onclick="increment(state.planks,1); displayPlanks();")>Gather</button></td>
+                <td><button onclick="increment(state.planks,1); displayPlanks(); displayBuildings();")>Gather</button></td>
                 <td>Planks: </td>
                 <td><span id="planks"></span> (+<span id="planksRate"></span>/s)</td>
                 <td>from <span id="planksNearby"></span> nearby</td>
@@ -54,13 +54,19 @@
                 <col width="45%"></col>
             </colgroup>
             <tr>
-                <td><button onclick="build(state.water.reservoirs.build,1); apply_calculate(state.water.max); displayWater(); displayResources(); displayWaterReservoirs();")>Build</button></td>
+                <td></td>
+                <td>Available Space: </td>
+                <td><span id="availableSpace"></span>/<span id="space"></span></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><button onclick="build(state.water.reservoirs.build,1); apply_calculate(state.water.max); apply_calculate(state.space.available); displayAll();") id="buildWaterReservoirs">Build</button></td>
                 <td>Water Reservoirs: </td>
                 <td><span id="waterReservoirs"></span></td>
                 <td><span id="waterReservoirsCost"></span>: +<span id="waterReservoirsEffect"></span> water</td>
             </tr>
             <tr>
-                <td><button onclick="build(state.water.supplies.build,1); apply_calculate(state.water.rate); displayWater(); displayResources(); displayWaterSupplies();")>Build</button></td>
+                <td><button onclick="build(state.water.supplies.build,1); apply_calculate(state.water.rate); apply_calculate(state.space.available); displayAll();") id="buildWaterSupplies">Build</button></td>
                 <td>Water Supplies: </td>
                 <td><span id="waterSupplies"></span></td>
                 <td><span id="waterSuppliesCost"></span>: +<span id="waterSuppliesEffect"></span> water/s</td>
