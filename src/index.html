@@ -38,6 +38,12 @@
                 <td><span id="plastic"></span> (+<span id="plasticRate"></span>/s)</td>
                 <td>from <span id="plasticNearby"></span> nearby</td>
             </tr>
+            <tr>
+                <td><button onclick="increment(state.planks,1); displayPlanks();")>Gather</button></td>
+                <td>Planks: </td>
+                <td><span id="planks"></span> (+<span id="planksRate"></span>/s)</td>
+                <td>from <span id="planksNearby"></span> nearby</td>
+            </tr>
         </table>
         <h2>Buildings</h2>
         <table style="width:100%" id="buildings">
@@ -73,6 +79,12 @@
                 <td>Plastic Gatherer: </td>
                 <td><span id="plasticGatherer"></span></td>
                 <td><button onclick="increment(state.plastic.gatherer,1); apply_calculate(state.plastic.rate); apply_calculate(state.population.unemployed); displayPlastic(); displayJobs();")>&gt;</button></td>
+            </tr>
+            <tr>
+                <td><button onclick="decrement(state.planks.gatherer,1); apply_calculate(state.planks.rate); apply_calculate(state.population.unemployed); displayPlanks(); displayJobs();")>&lt;</button></td>
+                <td>Plank Gatherer: </td>
+                <td><span id="planksGatherer"></span></td>
+                <td><button onclick="increment(state.planks.gatherer,1); apply_calculate(state.planks.rate); apply_calculate(state.population.unemployed); displayPlanks(); displayJobs();")>&gt;</button></td>
             </tr>
         </table>
     </td>
