@@ -70,6 +70,11 @@ function defineDefaultData(state) {
     state.water.reservoirs.name = "Water reservoir";
     state.water.reservoirs.current = 1;
     state.water.reservoirs.effect = 10;
+
+    return state;
+}
+function getDefaultData() {
+    return defineDefaultData({});
 }
 
 // Define buildings  ==============================================================================
@@ -149,14 +154,30 @@ function serialize(state) {
     var compressed = LZString.compressToBase64(json);
     return compressed;
 }
+function recursiveDefaults(variable, defaults) {
+    variable = _.defaults(variable, defaults);
+    _.chain(_.keys(variable))
+        .each(function(key){
+            if(_.isObject(variable[key]) && !_.isArray(variable[key]) && _.has(defaults,key)) {
+                variable[key] = recursiveDefaults(variable[key], defaults[key]);
+            }
+        });
+    return variable;
+}
 function deserialize(compressed) {
     var state = {};
     if(_.isNull(compressed) || _.isUndefined(compressed) || compressed==="undefined") {
         defineDefaultData(state);
     } else {
+        // load serialized data
         var json = LZString.decompressFromBase64(compressed);
         state = JSON.parse(json);
+
+        // fill in new variables that were not present in loaded data
+        var defaultData = getDefaultData();
+        recursiveDefaults(state, defaultData);
     }
+
 
     return defineNonData(state);
 }
@@ -273,7 +294,12 @@ function swim() {
     apply_calculate(state.plastic.nearby);
     if(Math.random() < state.population.findSurvivorProbability) {
         log("Found new survivor!");
-        increment(state.population, 1);
+        if(getValue(state.population.max)-getValue(state.population) > 0){
+            increment(state.population, 1);
+            log("The survivor joined you!");
+        } else {
+            log("Too bad you have not enough space on board.");
+        }
     }
 }
 
