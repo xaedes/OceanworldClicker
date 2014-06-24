@@ -47,9 +47,12 @@ function defineDefaultData(state) {
     state.autosave.counter.max = 60; // every minute
 
     state.space = {};
-    state.space.current = 10;
+    state.space.current = 0;
     state.space.available = {};
     state.space.available.current = 10;
+    state.space.enlargements = {};
+    state.space.enlargements.current = 1;
+    state.space.enlargements.size = -10;
 
     state.sight = {};
     state.sight.current = 1;
@@ -133,6 +136,7 @@ function getDefaultData() {
 function defineBuilds(state) {
     state.water.supplies.build = [{'variable':state.water.supplies,'amount':1,'building':true},{'variable':state.plastic,'amount':-10}];
     state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1,'building':true},{'variable':state.plastic,'amount':-10},{'variable':state.planks,'amount':-1}];
+    state.space.enlargements.build = [{'variable':state.space.enlargements,'amount':1,'building':true},{'variable':state.plastic,'amount':-1},{'variable':state.planks,'amount':-10}];
     return state;
 }
 
@@ -191,8 +195,8 @@ function defineCalculations(state) {
     defineCalculationsResourceGatherer(state.plastic);
     defineCalculationsResourceGatherer(state.planks);
 
-    // state.space.calculate = zero;
-    // state.space.calculate = _.compose(_.partial(add_to, state.water.reservoirs, state.water.reservoirs.size), state.space.calculate);
+    state.space.calculate = zero;
+    state.space.calculate = _.compose(_.partial(sub_from, state.space.enlargements, state.space.enlargements.size), state.space.calculate);
     // state.space.calculate = _.compose(_.partial(add_to, state.water.supplies, state.water.supplies.size), state.space.calculate);
 
     state.space.available.calculate = _.partial(value,state.space);
@@ -319,10 +323,17 @@ function displayWaterReservoirs() {
     setInt("waterReservoirsEffect", getValue(state.water.reservoirs.effect));
     setCost("waterReservoirsCost", state.water.reservoirs.build, state.water.reservoirs);
 }
+function displayShipEnlargements() {
+    setClickableBuild("buildShipEnlargements", state.space.enlargements, 1, state.space.available);
+    setInt("shipEnlargements", getValue(state.space.enlargements));
+    setInt("shipEnlargementsEffect", -getValue(state.space.enlargements.size));
+    setCost("shipEnlargementsCost", state.space.enlargements.build, state.space.enlargements);
+}
 function displayBuildings() {
     displaySpace();
     displayWaterSupplies();
     displayWaterReservoirs();
+    displayShipEnlargements();
 }
 function displayPopulation() {
     setInt("population",getValue(state.population));
@@ -470,6 +481,7 @@ function loop() {
     apply_calculate(state.population.unemployed);
     apply_calculate(state.plastic.gatherer.max);
     apply_calculate(state.planks.gatherer.max);
+    apply_calculate(state.space);
     apply_calculate(state.space.available);
 
     // Display

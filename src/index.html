@@ -60,6 +60,12 @@
                 <td></td>
             </tr>
             <tr>
+                <td><button onclick="build(state.space.enlargements.build,1); apply_calculate(state.space); apply_calculate(state.space.available); displayAll();") id="buildShipEnlargements">Build</button></td>
+                <td>Ship Enlargements: </td>
+                <td><span id="shipEnlargements"></span></td>
+                <td><span id="shipEnlargementsCost"></span>: +<span id="shipEnlargementsEffect"></span> space</td>
+            </tr>
+            <tr>
                 <td><button onclick="build(state.water.reservoirs.build,1); apply_calculate(state.water.max); apply_calculate(state.space.available); displayAll();") id="buildWaterReservoirs">Build</button></td>
                 <td>Water Reservoirs: </td>
                 <td><span id="waterReservoirs"></span></td>
