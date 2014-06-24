@@ -1,3 +1,10 @@
+// utility functions ==============================================================================
+function gaussian(variance) {
+    // http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
+    r1 = Math.random();
+    r2 = Math.random();
+    return Math.sqrt(-2*Math.log(r1)*variance)*Math.cos(2*Math.PI*r2);
+}
 // set html elements ==============================================================================
 function setInnerHTML(id,html) {
     document.getElementById(id).innerHTML = html;
@@ -20,6 +27,10 @@ function setCost(id,build,ignore) {
 
 // Define data ====================================================================================
 state = {};
+state.sight = {};
+state.sight.current = 1;
+state.sight.variance = 1;
+
 state.population = {};
 state.population.current = 1;
 state.population.max = {};
@@ -30,7 +41,11 @@ state.population.findSurvivorProbability = 0.1;
 state.plastic = {};
 state.plastic.name = "plastic";
 state.plastic.current = 0;
-state.plastic.nearby = 10;
+state.plastic.nearby = {};
+state.plastic.nearby.current = 0;
+state.plastic.density = 10; 
+
+
 state.water = {};
 state.water.current = 1;
 state.water.max = {};
@@ -56,6 +71,7 @@ state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1},{
 old = function(val) {return val;};
 zero = function(val) {return 0;};
 add_to = function(add_variable,add_weight,val) {return val+getValue(add_variable)*getValue(add_weight)};
+add_gaussian = function(variance_variable,scale_variable,val) {return val+gaussian(getValue(variance_variable)*getValue(scale_variable))};
 
 state.water.rate.calculate = zero; // begin with zero (omit old value)
 state.water.rate.calculate = _.compose(_.partial(add_to, state.population, state.population.waterConsumation), state.water.rate.calculate);
@@ -66,6 +82,10 @@ state.water.max.calculate = _.compose(_.partial(add_to, state.water.reservoirs, 
 
 state.water.calculate = old;
 state.water.calculate = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate);
+
+state.plastic.nearby.calculate = zero;
+state.plastic.nearby.calculate = _.compose(_.partial(add_to, state.sight, state.plastic.density), state.plastic.nearby.calculate);;
+state.plastic.nearby.calculate = _.compose(_.partial(add_gaussian, state.sight.variance, state.plastic.density), state.plastic.nearby.calculate);;
 
 // Logging ========================================================================================
 state.log = []
@@ -144,8 +164,9 @@ function setValue(variable, value) {
 function increment(variable, incr) {
     if(!isNaN(incr)){
         if(variable.hasOwnProperty("nearby") && (incr > 0)) {
-            incr = Math.min(incr,variable.nearby);
-            variable.nearby -= incr;
+            incr = Math.min(incr,getValue(variable.nearby));
+            decrement(variable.nearby, incr);
+            // variable.nearby -= incr;
         }
         setValue(variable, getValue(variable) + incr);
     }
@@ -169,12 +190,12 @@ function build(recipe, n) {
         }
     }
 }
-function random(min,max) {
-    return Math.random() * (max-min) + min;
-}
+
 function swim() {
+    log("Swimming to another area..");
     log("Found new resources");
-    state.plastic.nearby = random(10-5,10+5);
+    // state.plastic.nearby = random(10-5,10+5);
+    apply_calculate(state.plastic.nearby);
     if(Math.random() < state.population.findSurvivorProbability) {
         log("Found new survivor!");
         increment(state.population, 1);
@@ -188,7 +209,6 @@ function apply_calculate(variable) {
 }
 
 // game loop ======================================================================================
-
 function loop() {
     apply_calculate(state.water.max);
     apply_calculate(state.water.rate);
@@ -197,5 +217,6 @@ function loop() {
     displayAll();
 }
 
+apply_calculate(state.plastic.nearby);
 displayAll();
 loop_interval = window.setInterval(loop, 1000);
