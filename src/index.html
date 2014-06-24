@@ -14,19 +14,19 @@
         <div> Plastic: <span id="plastic"></span> <button onclick="increment(state.plastic,1); displayPlastic();")>Gather</button> from <span id="plasticNearby"></span> nearby </div>
         <table style="width:100%" id="buildings">
             <colgroup>
-                <col width="25%"></col>
+                <col width="15%"></col>
                 <col width="25%"></col>
                 <col width="15%"></col>
-                <col width="35%"></col>
+                <col width="45%"></col>
             </colgroup>
             <tr>
-                <td><button onclick="build(state.water.reservoirs.build,1); apply_calculate(state.water.max); displayWater(); displayResources(); displayWaterReservoirs();")>Build Water Reservoirs</button></td>
+                <td><button onclick="build(state.water.reservoirs.build,1); apply_calculate(state.water.max); displayWater(); displayResources(); displayWaterReservoirs();")>Build</button></td>
                 <td>Water Reservoirs: </td>
                 <td><span id="waterReservoirs"></span></td>
                 <td><span id="waterReservoirsCost"></span> +<span id="waterReservoirsEffect"></span> water</td>
             </tr>
             <tr>
-                <td><button onclick="build(state.water.supplies.build,1); apply_calculate(state.water.rate); displayWater(); displayResources(); displayWaterSupplies();")>Build Water Supplies</button></td>
+                <td><button onclick="build(state.water.supplies.build,1); apply_calculate(state.water.rate); displayWater(); displayResources(); displayWaterSupplies();")>Build</button></td>
                 <td>Water Supplies: </td>
                 <td><span id="waterSupplies"></span></td>
                 <td><span id="waterSuppliesCost"></span> +<span id="waterSuppliesEffect"></span> water/s</td>
