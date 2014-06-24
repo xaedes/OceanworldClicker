@@ -61,11 +61,17 @@ function defineDefaultData(state) {
     state.population = {};
     state.population.current = 1;
     state.population.max = {};
-    state.population.max.current = 2;
+    state.population.max.current = 0;
     state.population.waterConsumation = -0.1;
     state.population.findSurvivorProbability = 0.1;
     state.population.unemployed = {};
     state.population.unemployed.current = 0;
+
+    state.population.cabin = {}
+    state.population.cabin.current = 1;
+    state.population.cabin.size = 5;
+    state.population.cabin.effect = 1;
+
 
 
     state.plastic = {};
@@ -137,6 +143,7 @@ function defineBuilds(state) {
     state.water.supplies.build = [{'variable':state.water.supplies,'amount':1,'building':true},{'variable':state.plastic,'amount':-10}];
     state.water.reservoirs.build = [{'variable':state.water.reservoirs,'amount':1,'building':true},{'variable':state.plastic,'amount':-10},{'variable':state.planks,'amount':-1}];
     state.space.enlargements.build = [{'variable':state.space.enlargements,'amount':1,'building':true},{'variable':state.plastic,'amount':-1},{'variable':state.planks,'amount':-10}];
+    state.population.cabin.build = [{'variable':state.population.cabin,'amount':1,'building':true},{'variable':state.plastic,'amount':-1},{'variable':state.planks,'amount':-5}];
     return state;
 }
 
@@ -168,6 +175,9 @@ function defineCalculations(state) {
 
     state.water.calculate = old;
     state.water.calculate = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate);
+
+    state.population.max.calculate = zero;
+    state.population.max.calculate = _.compose(_.partial(add_to, state.population.cabin, state.population.cabin.effect), state.population.max.calculate);
 
     state.population.unemployed.calculate = _.partial(value, state.population);
 
@@ -202,6 +212,7 @@ function defineCalculations(state) {
     state.space.available.calculate = _.partial(value,state.space);
     state.space.available.calculate = _.compose(_.partial(sub_from, state.water.reservoirs, state.water.reservoirs.size), state.space.available.calculate);
     state.space.available.calculate = _.compose(_.partial(sub_from, state.water.supplies, state.water.supplies.size), state.space.available.calculate);
+    state.space.available.calculate = _.compose(_.partial(sub_from, state.population.cabin, state.population.cabin.size), state.space.available.calculate);
 
     return state;
 }
@@ -329,11 +340,18 @@ function displayShipEnlargements() {
     setInt("shipEnlargementsEffect", -getValue(state.space.enlargements.size));
     setCost("shipEnlargementsCost", state.space.enlargements.build, state.space.enlargements);
 }
+function displayCabins() {
+    setClickableBuild("buildCabin", state.population.cabin, 1, state.space.available);
+    setInt("cabins", getValue(state.population.cabin));
+    setInt("cabinsEffect", getValue(state.population.cabin.effect));
+    setCost("cabinsCost", state.population.cabin.build, state.population.cabin);
+}
 function displayBuildings() {
     displaySpace();
     displayWaterSupplies();
     displayWaterReservoirs();
     displayShipEnlargements();
+    displayCabins();
 }
 function displayPopulation() {
     setInt("population",getValue(state.population));
@@ -478,6 +496,7 @@ function loop() {
     apply_calculate(state.planks.nearby);
     apply_calculate(state.planks);
     
+    apply_calculate(state.population.max);
     apply_calculate(state.population.unemployed);
     apply_calculate(state.plastic.gatherer.max);
     apply_calculate(state.planks.gatherer.max);

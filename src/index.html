@@ -66,6 +66,12 @@
                 <td><span id="shipEnlargementsCost"></span>: +<span id="shipEnlargementsEffect"></span> space</td>
             </tr>
             <tr>
+                <td><button onclick="build(state.population.cabin.build,1); apply_calculate(state.population.max); apply_calculate(state.population.unemployed); apply_calculate(state.space.available); displayAll();") id="buildCabin">Build</button></td>
+                <td>Cabin: </td>
+                <td><span id="cabins"></span></td>
+                <td><span id="cabinsCost"></span>: +<span id="cabinsEffect"></span> population</td>
+            </tr>
+            <tr>
                 <td><button onclick="build(state.water.reservoirs.build,1); apply_calculate(state.water.max); apply_calculate(state.space.available); displayAll();") id="buildWaterReservoirs">Build</button></td>
                 <td>Water Reservoirs: </td>
                 <td><span id="waterReservoirs"></span></td>
