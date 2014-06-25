@@ -74,7 +74,7 @@ function defineDefaultData(state) {
     state.population.current = 1;
     state.population.max = {};
     state.population.max.current = 0;
-    state.population.waterConsumation = -0.1;
+    state.population.waterConsumation = -1;
     state.population.findSurvivorProbability = 0.1;
     state.population.unemployed = {};
     state.population.unemployed.current = 0;
@@ -329,14 +329,14 @@ function version(state) {
 
 
 function version_upgrade(state) {
-    var currentVersion = 2;
+    var currentVersion = 3;
     var stateVersion = version(state);
     if (stateVersion<currentVersion) {
         switch (stateVersion) {
         case 0:
             // add state.version
             state.version = 1;
-            break;
+            // FALLTHROUGH       
         case 1:
             // new values for:
             delete state.plastic.density;
@@ -344,6 +344,12 @@ function version_upgrade(state) {
             delete state.sight.lookout.effect;
 
             state.version = 2;
+            // FALLTHROUGH       
+        case 2:
+            // new values for:
+            delete state.population.waterConsumation;
+
+            state.version = 3;
             break;        
         default:
             log(sprintf("Unknown version: %d", stateVersion));
