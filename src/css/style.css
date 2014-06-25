@@ -1,6 +1,6 @@
 
 body {
-    font-family: clearsans, sans, Arial;
+    font-family: sans, Arial;
     font-weight: 400;
 }
 button {
@@ -11,7 +11,7 @@ button {
     border-color: black;
     background-color: white;
     box-shadow: 2px 2px 0px 0px rgba(36, 36, 36, 0.5);
-    font-family: clearsans, sans, Arial;
+    font-family: sans, Arial;
     font-weight: 600;
 }
 
@@ -61,4 +61,20 @@ h2 {
 
 #resetGame {
     float: right;
+}
+
+#the_ocean {
+    min-height: 5em;
+    /*width: 15em;*/
+}
+#the_ocean #dialog_options {
+    display: none;
+    /*float: right;*/
+}
+#the_ocean #dialog {
+    height: 4em;
+    overflow: auto;
+}
+button {
+    display: inline;
 }

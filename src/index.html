@@ -41,7 +41,18 @@
             </tr>
         </table>
 
-        <div> <button onclick="swim(); displayAll();")>Swim around</button> </div>
+        <div id="the_ocean"> 
+            <div id="dialog">
+                
+                <div id="msg">
+                </div>
+            </div>
+            <button onclick="swim(); displayAll();" id="swim")>Swim around</button> 
+            <span id="dialog_options">
+            <button onclick="state.dialog.optionA();" id="optionA" style="display: None;">A</button>
+            <button onclick="dismiss()" id="dismiss">dismiss</button>
+            </span>
+        </div>
         <h2>Building Materials</h2>
         <table style="width:100%" id="resources">
             <colgroup>
