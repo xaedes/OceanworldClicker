@@ -345,8 +345,8 @@ function version_upgrade_0_1(state) {
 function version_upgrade(state) {
     var currentVersion = 1;
     var stateVersion = version(state);
-    if (stateVersion<current) {
-        switch (Eingabe) {
+    if (stateVersion<currentVersion) {
+        switch (stateVersion) {
         case 0:
             return version_upgrade_0_1(state);
             break;
