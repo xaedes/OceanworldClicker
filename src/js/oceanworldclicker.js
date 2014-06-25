@@ -79,6 +79,10 @@ function defineDefaultData(state) {
     state.plastic.current = 0;
     state.plastic.nearby = {};
     state.plastic.nearby.current = 0;
+    state.plastic.nearby.min = {};
+    state.plastic.nearby.min.current = 0;
+    state.plastic.nearby.max = {};
+    state.plastic.nearby.max.current = 0;
     state.plastic.density = 10; 
 
     state.plastic.rate = {};
@@ -96,6 +100,11 @@ function defineDefaultData(state) {
     state.planks.current = 0;
     state.planks.nearby = {};
     state.planks.nearby.current = 0;
+    state.planks.nearby.min = {};
+    state.planks.nearby.min.current = 0;
+    state.planks.nearby.max = {};
+    state.planks.nearby.max.current = 0;
+
     state.planks.density = 10; 
 
     state.planks.rate = {};
@@ -182,6 +191,15 @@ function defineCalculations(state) {
     state.population.unemployed.calculate = _.partial(value, state.population);
 
     function defineCalculationsResourceGatherer(resource) {
+        resource.nearby.min.calculate = zero;
+        resource.nearby.min.calculate = _.compose(_.partial(add_to, state.sight, resource.density), resource.nearby.min.calculate);
+        resource.nearby.min.calculate = _.compose(_.partial(sub_from, state.sight.variance, resource.density), resource.nearby.min.calculate);
+        resource.nearby.min.calculate = _.compose(_.partial(Math.max, 0), resource.nearby.min.calculate);
+
+        resource.nearby.max.calculate = zero;
+        resource.nearby.max.calculate = _.compose(_.partial(add_to, state.sight, resource.density), resource.nearby.max.calculate);
+        resource.nearby.max.calculate = _.compose(_.partial(add_to, state.sight.variance, resource.density), resource.nearby.max.calculate);
+
         resource.nearby.calculate_swim = zero;
         resource.nearby.calculate_swim = _.compose(_.partial(add_to, state.sight, resource.density), resource.nearby.calculate_swim);
         resource.nearby.calculate_swim = _.compose(_.partial(add_gaussian, state.sight.variance, resource.density), resource.nearby.calculate_swim);
@@ -477,6 +495,18 @@ function resetGame() {
     log("Resetting game");
 }
 
+function apply_calculate_on_resource(resource) {
+    apply_calculate(resource.rate);
+    apply_calculate(resource.nearby.min);
+    apply_calculate(resource.nearby.max);
+    apply_calculate(resource.nearby);
+    apply_calculate(resource);
+}
+function apply_calculate_on_resource_and_gatherer(resource) {
+    apply_calculate(resource.gatherer.max);
+    apply_calculate_on_resource(resource);
+}
+
 // game loop ======================================================================================
 function loop() {
     // Autosave
@@ -489,17 +519,13 @@ function loop() {
     apply_calculate(state.water.rate);
     apply_calculate(state.water);
     apply_calculate(state.autosave.counter);
-    apply_calculate(state.plastic.rate);
-    apply_calculate(state.plastic.nearby);
-    apply_calculate(state.plastic);
-    apply_calculate(state.planks.rate);
-    apply_calculate(state.planks.nearby);
-    apply_calculate(state.planks);
+
+    apply_calculate_on_resource_and_gatherer(state.plastic);
+    apply_calculate_on_resource_and_gatherer(state.planks);
     
     apply_calculate(state.population.max);
     apply_calculate(state.population.unemployed);
-    apply_calculate(state.plastic.gatherer.max);
-    apply_calculate(state.planks.gatherer.max);
+
     apply_calculate(state.space);
     apply_calculate(state.space.available);
 
