@@ -212,11 +212,6 @@ function defineCalculations(state) {
     }
 
     function defineCalculationsResourceGatherer(resource) {
-        resource.nearby.min.calculate = zero;
-        resource.nearby.min.calculate = _.compose(_.partial(add_to, state.sight, resource.density), resource.nearby.min.calculate);
-        resource.nearby.min.calculate = _.compose(_.partial(sub_from, state.sight.variance, resource.density), resource.nearby.min.calculate);
-        resource.nearby.min.calculate = _.compose(_.partial(Math.max, 0), resource.nearby.min.calculate);
-
         resource.nearby.max.calculate = zero;
         resource.nearby.max.calculate = _.compose(_.partial(add_to, state.sight, resource.density), resource.nearby.max.calculate);
         resource.nearby.max.calculate = _.compose(_.partial(add_to, state.sight.variance, resource.density), resource.nearby.max.calculate);
@@ -491,7 +486,6 @@ function decrement(variable, decr) {
 function isBuildApplicable(recipe, n, available) {
     var applicable = true;
     for (var i = recipe.length - 1; i >= 0; i--) {
-        console.log(recipe[i]);
         if (recipe[i].variable.current+recipe[i].amount<0){
             applicable = false;
             break;
@@ -563,7 +557,6 @@ function apply_calculate_on_job(job) {
 }
 function apply_calculate_on_resource(resource) {
     apply_calculate(resource.rate);
-    apply_calculate(resource.nearby.min);
     apply_calculate(resource.nearby.max);
     apply_calculate(resource.nearby);
     apply_calculate(resource);
