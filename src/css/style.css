@@ -5,11 +5,11 @@ body {
 button {
     border-radius: 8px;
     padding: 4px 6px;
-    border: 2px;
+    border: 1px;
     border-style: solid;
     border-color: black;
     background-color: white;
-    box-shadow: 3px 3px 0px 0px rgba(36, 36, 36, 0.8);
+    box-shadow: 2px 2px 0px 0px rgba(36, 36, 36, 0.5);
 }
 }
 
