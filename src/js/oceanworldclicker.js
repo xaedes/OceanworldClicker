@@ -315,7 +315,7 @@ function deserialize(compressed) {
 
         // fill in new variables that were not present in loaded data
         var defaultData = getDefaultData();
-        recursiveDefaults(state, defaultData);
+        state = recursiveDefaults(state, defaultData);
     }
 
 
@@ -561,7 +561,6 @@ function resetGameNoLog() {
     defineNonData(state);
     apply_calculate(state.plastic.nearby);
     apply_calculate(state.planks.nearby);
-    loop();
 }
 function resetGame() {
     resetGameNoLog();
