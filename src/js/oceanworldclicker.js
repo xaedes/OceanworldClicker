@@ -294,6 +294,7 @@ function deserialize(compressed) {
         // load serialized data
         var json = LZString.decompressFromBase64(compressed);
         state = JSON.parse(json);
+        state = version_upgrade(state);
 
         // fill in new variables that were not present in loaded data
         var defaultData = getDefaultData();
@@ -302,6 +303,44 @@ function deserialize(compressed) {
 
 
     return defineNonData(state);
+}
+
+function version(state) {
+    if(!state.hasOwnProperty("version")) {
+        return 0;
+    } else {
+        return state.version;
+    }
+}
+
+function version_upgrade_0_1(state) {
+    if(version(state)!=0)
+        return false;
+
+    // new in this version: 
+    // add state.version
+    state.version = 1;
+
+    return state;
+}
+
+function version_upgrade(state) {
+    var currentVersion = 1;
+    var stateVersion = version(state);
+    if (stateVersion<current) {
+        switch (Eingabe) {
+        case 0:
+            return version_upgrade_0_1(state);
+            break;
+        default:
+            log(sprintf("Unknown version: %d", stateVersion));
+            log(sprintf("Current version: %d", currentVersion));
+            return null;
+            break;
+        }
+    } else {
+        return state;
+    }
 }
 
 function load() {
