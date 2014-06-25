@@ -14,7 +14,6 @@ button {
     font-family: clearsans, sans, Arial;
     font-weight: 600;
 }
-}
 
 h1 {
     font-size: 1.4em;
@@ -24,6 +23,10 @@ h1 {
 h2 {
     font-size: 1.0em;
     font-weight: 800;
+}
+
+.fa {
+    margin-right: 10px;
 }
 
 #log {
