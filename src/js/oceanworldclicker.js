@@ -61,6 +61,14 @@ function defineDefaultData(state) {
     state.sight.current = 1;
     state.sight.variance = 1;
 
+
+    state.sight.lookout = {};
+    state.sight.lookout.current = 0;
+    state.sight.lookout.effect = 1;
+    state.sight.lookout.min = 0;
+    state.sight.lookout.max = {};
+    state.sight.lookout.max.current = 0;
+
     state.population = {};
     state.population.current = 1;
     state.population.max = {};
@@ -194,6 +202,15 @@ function defineCalculations(state) {
 
     state.population.unemployed.calculate = _.partial(value, state.population);
 
+    state.sight.calculate = _.partial(value, 1);
+    state.sight.calculate = _.compose(_.partial(add_to, state.sight.lookout, state.sight.lookout.effect), state.sight.calculate);
+
+    function defineCalculationsJob(job) {
+        job.max.calculate = _.partial(value, state.population.unemployed);
+        job.max.calculate = _.compose(_.partial(add_to, job, 1), job.max.calculate);
+        state.population.unemployed.calculate = _.compose(_.partial(sub_from, job, 1), state.population.unemployed.calculate);
+    }
+
     function defineCalculationsResourceGatherer(resource) {
         resource.nearby.min.calculate = zero;
         resource.nearby.min.calculate = _.compose(_.partial(add_to, state.sight, resource.density), resource.nearby.min.calculate);
@@ -222,10 +239,11 @@ function defineCalculations(state) {
         resource.nearby.calculate = old;
         resource.nearby.calculate = _.compose(_.partial(sub_from, resource.rate, 1), resource.nearby.calculate);
 
-        state.population.unemployed.calculate = _.compose(_.partial(sub_from, resource.gatherer, 1), state.population.unemployed.calculate);
+        defineCalculationsJob(resource.gatherer);
     }
     defineCalculationsResourceGatherer(state.plastic);
     defineCalculationsResourceGatherer(state.planks);
+    defineCalculationsJob(state.sight.lookout);
 
     state.space.calculate = zero;
     state.space.calculate = _.compose(_.partial(sub_from, state.space.enlargements, state.space.enlargements.size), state.space.calculate);
@@ -420,8 +438,9 @@ function displayPopulation() {
 }
 function displayJobs() {
     setInt("unemployed",getValue(state.population.unemployed));
-    setInt("plasticGatherer",getValue(state.plastic.gatherer));
+    setInt("lookout",getValue(state.sight.lookout));
     setInt("planksGatherer",getValue(state.planks.gatherer));
+    setInt("plasticGatherer",getValue(state.plastic.gatherer));
 }
 function displayAll() {
     displayWater();
@@ -501,6 +520,7 @@ function build(recipe, n) {
 function swim() {
     log("Swimming to another area..");
     log("Found new resources");
+    apply_calculate(state.sight);
     apply_calculate_suffix(state.plastic.nearby,"swim");
     apply_calculate_suffix(state.planks.nearby,"swim");
 
@@ -538,6 +558,9 @@ function resetGame() {
     log("Resetting game");
 }
 
+function apply_calculate_on_job(job) {
+    apply_calculate(job.max);
+}
 function apply_calculate_on_resource(resource) {
     apply_calculate(resource.rate);
     apply_calculate(resource.nearby.min);
@@ -546,7 +569,7 @@ function apply_calculate_on_resource(resource) {
     apply_calculate(resource);
 }
 function apply_calculate_on_resource_and_gatherer(resource) {
-    apply_calculate(resource.gatherer.max);
+    apply_calculate_on_job(resource.gatherer);
     apply_calculate_on_resource(resource);
 }
 
@@ -566,8 +589,12 @@ function loop() {
     apply_calculate_on_resource_and_gatherer(state.plastic);
     apply_calculate_on_resource_and_gatherer(state.planks);
     
+    apply_calculate_on_job(state.sight.lookout);
+
     apply_calculate(state.population.max);
     apply_calculate(state.population.unemployed);
+
+    apply_calculate(state.sight);
 
     apply_calculate(state.space);
     apply_calculate(state.space.available);
