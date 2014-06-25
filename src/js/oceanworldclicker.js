@@ -379,7 +379,7 @@ function log(msg) {
     state.log.push(msg);
     console.log(msg);
     date = new Date().timeNow()
-    document.getElementById("log").innerHTML = "<div>" + date + " " + msg + "</div>" + document.getElementById("log").innerHTML;
+    document.getElementById("log").innerHTML = "<div><span class='time'>" + date + "</span> <span class='message'>" + msg + "</span></div>" + document.getElementById("log").innerHTML;
 }
 // display functions ==============================================================================
 function displayWater() {
