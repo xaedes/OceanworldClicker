@@ -64,7 +64,8 @@ h2 {
     /*float: right;*/
 }
 #the_ocean #dialog {
-    height: 3em;
+    height: 4em;
+    overflow: auto;
 }
 button {
     display: inline;

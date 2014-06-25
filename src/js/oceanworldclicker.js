@@ -10,7 +10,10 @@ function setInnerHTML(id,html) {
     document.getElementById(id).innerHTML = html;
 }
 function appendInnerHTML(id,html) {
-    document.getElementById(id).innerHTML = document.getElementById(id).innerHTML  + html;
+    document.getElementById(id).innerHTML = document.getElementById(id).innerHTML + html;
+}
+function insertInnerHTML(id,html) {
+    document.getElementById(id).innerHTML = html + document.getElementById(id).innerHTML;
 }
 function setFloat(id,value) {
     setInnerHTML(id,sprintf("%.2f",value));
@@ -167,6 +170,7 @@ function defineDefaultData(state) {
     state.water.reservoirs.effect = 10;
     state.water.reservoirs.size = 1;
 
+    state.dialog = {};
 
 
     return state;
@@ -586,6 +590,17 @@ function swim() {
         if(getValue(state.population.max)-getValue(state.population) > 0){
             log("The survivor joined you!");
             increment(state.population, 1);
+            if(getValue(state.population)==30) {
+                log_and_dialog("You greet the survivor and you see something interesting he holds in his hands.");
+                state.dialog.optionA = function() {
+                    clearDialog();
+                    log_and_dialog("You: Behold fello, what is this most interesting there you hold?");
+                    log_and_dialog("Stranger: ....");
+                };
+                setVisibleInline("optionA");
+                setInnerHTML("optionA","Ask him about it.");
+                setDisabled("swim");
+            }
         } else {
             dialog("Found new survivor!");
             log_and_dialog("Too bad you have not enough space on board.");
