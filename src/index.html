@@ -31,6 +31,10 @@
                 <td>Population:</td>
                 <td><span id="population"></span> / <span id="populationMax"></span></td>
             </tr>
+            <tr>
+                <td>Sight:</td>
+                <td>ca. <span id="sight"></span> </td>
+            </tr>
         </table>
 
         <div> <button onclick="swim(); displayAll();")>Swim around</button> </div>
@@ -103,10 +107,10 @@
                 <td></td>
             </tr>
             <tr>
-                <td><button onclick="decrement(state.sight.lookout,1); apply_calculate(state.sight); apply_calculate(state.population.unemployed); displayJobs();")>&lt;</button></td>
+                <td><button onclick="decrement(state.sight.lookout,1); apply_calculate(state.sight); apply_calculate(state.population.unemployed); displaySight(); displayJobs();")>&lt;</button></td>
                 <td>Lookout: </td>
                 <td><span id="lookout"></span></td>
-                <td><button onclick="increment(state.sight.lookout,1); apply_calculate(state.sight); apply_calculate(state.population.unemployed); displayJobs();")>&gt;</button></td>
+                <td><button onclick="increment(state.sight.lookout,1); apply_calculate(state.sight); apply_calculate(state.population.unemployed); displaySight(); displayJobs();")>&gt;</button></td>
             </tr>
             <tr>
                 <td><button onclick="decrement(state.plastic.gatherer,1); apply_calculate(state.plastic.rate); apply_calculate(state.population.unemployed); displayPlastic(); displayJobs();")>&lt;</button></td>

@@ -60,11 +60,12 @@ function defineDefaultData(state) {
     state.sight = {};
     state.sight.current = 1;
     state.sight.variance = 1;
+    state.sight.start_value = 10;
 
 
     state.sight.lookout = {};
     state.sight.lookout.current = 0;
-    state.sight.lookout.effect = 1;
+    state.sight.lookout.effect = 10;
     state.sight.lookout.min = 0;
     state.sight.lookout.max = {};
     state.sight.lookout.max.current = 0;
@@ -94,7 +95,7 @@ function defineDefaultData(state) {
     state.plastic.nearby.min.current = 0;
     state.plastic.nearby.max = {};
     state.plastic.nearby.max.current = 0;
-    state.plastic.density = 10; 
+    state.plastic.density = 1; 
 
     state.plastic.rate = {};
     state.plastic.rate.current = 0;
@@ -116,7 +117,7 @@ function defineDefaultData(state) {
     state.planks.nearby.max = {};
     state.planks.nearby.max.current = 0;
 
-    state.planks.density = 10; 
+    state.planks.density = 1; 
 
     state.planks.rate = {};
     state.planks.rate.current = 0;
@@ -202,7 +203,7 @@ function defineCalculations(state) {
 
     state.population.unemployed.calculate = _.partial(value, state.population);
 
-    state.sight.calculate = _.partial(value, 1);
+    state.sight.calculate = _.partial(value, state.sight.start_value);
     state.sight.calculate = _.compose(_.partial(add_to, state.sight.lookout, state.sight.lookout.effect), state.sight.calculate);
 
     function defineCalculationsJob(job) {
@@ -326,31 +327,31 @@ function version(state) {
     }
 }
 
-function version_upgrade_0_1(state) {
-    if(version(state)!=0)
-        return false;
-
-    // new in this version: 
-    // add state.version
-    state.version = 1;
-
-    return state;
-}
 
 function version_upgrade(state) {
-    var currentVersion = 1;
+    var currentVersion = 2;
     var stateVersion = version(state);
     if (stateVersion<currentVersion) {
         switch (stateVersion) {
         case 0:
-            return version_upgrade_0_1(state);
+            // add state.version
+            state.version = 1;
             break;
+        case 1:
+            // new values for:
+            delete state.plastic.density;
+            delete state.planks.density;
+            delete state.sight.lookout.effect;
+
+            state.version = 2;
+            break;        
         default:
             log(sprintf("Unknown version: %d", stateVersion));
             log(sprintf("Current version: %d", currentVersion));
             return null;
             break;
         }
+        return state;
     } else {
         return state;
     }
@@ -395,6 +396,10 @@ function displayResources() {
 function displaySpace() {
     setInt("space",getValue(state.space));
     setInt("availableSpace",getValue(state.space.available));
+}
+function displaySight() {
+    setInt("sight",getValue(state.sight));
+    // setInt("sightVariance",getValue(state.sight.variance));
 }
 function displayWaterSupplies() {
     setClickableBuild("buildWaterSupplies", state.water.supplies, 1, state.space.available);
@@ -442,6 +447,7 @@ function displayAll() {
     displayResources();
     displayBuildings();
     displayPopulation();
+    displaySight();
     displayJobs();
     // displayLog();
 }
