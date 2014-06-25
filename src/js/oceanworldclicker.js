@@ -12,6 +12,9 @@ function setInnerHTML(id,html) {
 function setFloat(id,value) {
     setInnerHTML(id,sprintf("%.2f",value));
 }
+function setSignedFloat(id,value) {
+    setInnerHTML(id,sprintf("%s%.2f",(value < 0?'-':'+'),Math.abs(value)));
+}
 function setInt(id,value) {
     setInnerHTML(id,sprintf("%d",value));
 }
@@ -320,16 +323,16 @@ function displayWater() {
     setFloat("water",getValue(state.water));
     setFloat("waterMax",getValue(state.water.max));
     setInt("waterSupplies",getValue(state.water.supplies));
-    setFloat("waterRate",getValue(state.water.rate));
+    setSignedFloat("waterRate",getValue(state.water.rate));
 }
 function displayPlastic() {
     setInt("plastic",getValue(state.plastic));
-    setFloat("plasticRate",getValue(state.plastic.rate));
+    setSignedFloat("plasticRate",getValue(state.plastic.rate));
     setInt("plasticNearby",getValue(state.plastic.nearby));
 }
 function displayPlanks() {
     setInt("planks",getValue(state.planks));
-    setFloat("planksRate",getValue(state.planks.rate));
+    setSignedFloat("planksRate",getValue(state.planks.rate));
     setInt("planksNearby",getValue(state.planks.nearby));
 }
 function displayResources() {
