@@ -1,6 +1,7 @@
 
 body {
-    font-family: Clear Sans, sans, Arial;
+    font-family: clearsans, sans, Arial;
+    font-weight: 400;
 }
 button {
     border-radius: 8px;
@@ -10,15 +11,22 @@ button {
     border-color: black;
     background-color: white;
     box-shadow: 2px 2px 0px 0px rgba(36, 36, 36, 0.5);
-}
+    font-family: clearsans, sans, Arial;
+    font-weight: 600;
 }
 
 h1 {
     font-size: 1.4em;
+    font-weight: 800;
 }
 
 h2 {
     font-size: 1.0em;
+    font-weight: 800;
+}
+
+.fa {
+    margin-right: 10px;
 }
 
 #log {
