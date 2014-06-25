@@ -123,6 +123,7 @@ function defineDefaultData(state) {
 
     state.water = {};
     state.water.current = 1;
+    state.water.min = 0;
     state.water.max = {};
     state.water.max.current = 10;
 
