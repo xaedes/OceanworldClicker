@@ -21,6 +21,7 @@ h1 {
     font-family: 'Kaushan Script';
     font-weight: 400;
     margin-bottom: 0;
+    letter-spacing: 1px;
 }
 
 h2 {
@@ -28,6 +29,7 @@ h2 {
     font-family: 'Kaushan Script';
     font-weight: 400;
     margin-bottom: 0;
+    letter-spacing: 1px;
 }
 
 .fa {
