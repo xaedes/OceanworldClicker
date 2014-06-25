@@ -54,3 +54,18 @@ h2 {
 #resetGame {
     float: right;
 }
+
+#the_ocean {
+    min-height: 5em;
+    /*width: 15em;*/
+}
+#the_ocean #dialog_options {
+    display: none;
+    /*float: right;*/
+}
+#the_ocean #dialog {
+    height: 3em;
+}
+button {
+    display: inline;
+}

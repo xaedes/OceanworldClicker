@@ -9,6 +9,9 @@ function gaussian(variance) {
 function setInnerHTML(id,html) {
     document.getElementById(id).innerHTML = html;
 }
+function appendInnerHTML(id,html) {
+    document.getElementById(id).innerHTML = document.getElementById(id).innerHTML  + html;
+}
 function setFloat(id,value) {
     setInnerHTML(id,sprintf("%.2f",value));
 }
@@ -38,6 +41,18 @@ function setClickableBuild(id, building, n, available) {
     } else {
         setDisabled(id);
     }
+}
+function setVisibleBlock(id) {
+    document.getElementById(id).style.display = "block";
+}
+function setVisibleInline(id) {
+    document.getElementById(id).style.display = "inline";
+}
+function setHidden(id) {
+    document.getElementById(id).style.display = "none";
+}
+function getHTMLElem(id) {
+    return document.getElementById(id);
 }
 
 // Define data ====================================================================================
@@ -537,24 +552,56 @@ function build(recipe, n) {
     return false;
 }
 
+function clearDialog() {
+    setInnerHTML("msg","");
+}
+function dialog(msg) {
+    setVisibleInline("dialog_options");
+    appendInnerHTML("msg",msg+"<br />");
+}
+function dismiss() {
+    clearDialog();
+    setHidden('dialog_options');
+}
+
 function swim() {
+
+    function log_and_dialog(msg) {
+        log(msg);
+        dialog(msg);
+    }
     log("Swimming to another area..");
     log("Found new resources");
     apply_calculate(state.sight);
     apply_calculate_suffix(state.plastic.nearby,"swim");
     apply_calculate_suffix(state.planks.nearby,"swim");
 
+    clearDialog();
+    dismiss()
     if(Math.random() < state.population.findSurvivorProbability) {
         log("Found new survivor!");
         if(getValue(state.population.max)-getValue(state.population) > 0){
             log("The survivor joined you!");
             increment(state.population, 1);
         } else {
-            log("Too bad you have not enough space on board.");
+            dialog("Found new survivor!");
+            log_and_dialog("Too bad you have not enough space on board.");
         }
     }
 }
 
+function apply_calculate_by_name(variable, name) {
+    if(variable.hasOwnProperty(name)){
+        var value = null;
+        if(variable[name].hasOwnProperty("input")){
+            value = getValue();
+        } else {
+            // use old value as input
+            value = getValue(variable);
+        }
+        setValue(variable, variable[name](getValue(variable)));
+    }
+}
 function apply_calculate(variable) {
     if(variable.hasOwnProperty("calculate")){
         setValue(variable, variable.calculate(getValue(variable)));
