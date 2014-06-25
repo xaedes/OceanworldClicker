@@ -198,6 +198,9 @@ function defineCalculations(state) {
     state.water.calculate = old;
     state.water.calculate = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate);
 
+    state.population.calculate = old;
+    state.population.calculate = _.compose(function(pop){return (getValue(state.water)+getValue(state.water.rate)<0) ? pop-1 : pop;}, state.population.calculate);
+
     state.population.max.calculate = zero;
     state.population.max.calculate = _.compose(_.partial(add_to, state.population.cabin, state.population.cabin.effect), state.population.max.calculate);
 
@@ -558,6 +561,7 @@ function resetGameNoLog() {
     defineNonData(state);
     apply_calculate(state.plastic.nearby);
     apply_calculate(state.planks.nearby);
+    loop();
 }
 function resetGame() {
     resetGameNoLog();
@@ -597,6 +601,7 @@ function loop() {
     apply_calculate_on_job(state.sight.lookout);
 
     apply_calculate(state.population.max);
+    apply_calculate(state.population);
     apply_calculate(state.population.unemployed);
 
     apply_calculate(state.sight);
@@ -610,7 +615,7 @@ function loop() {
 
 resetGameNoLog();
 load();
-displayAll();
 
 loop_interval = window.setInterval(loop, 1000);
 loop();
+displayAll();
