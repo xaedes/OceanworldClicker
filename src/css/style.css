@@ -20,12 +20,16 @@ h1 {
     font-size: 2em;
     font-family: 'Kaushan Script';
     font-weight: 400;
+    margin-bottom: 0;
+    letter-spacing: 1px;
 }
 
 h2 {
     font-size: 1.3em;
     font-family: 'Kaushan Script';
     font-weight: 400;
+    margin-bottom: 0;
+    letter-spacing: 1px;
 }
 
 .fa {
