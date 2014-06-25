@@ -276,7 +276,7 @@ Date.prototype.timeNow = function () {
 // Load & Save ====================================================================================
 function sanitize_for_serialization(variable) {
     // omit non data keys
-    var sanitized = _.omit(variable, 'calculate', 'build');
+    var sanitized = _.omit(variable, 'calculate', 'build','log');
     // recursive sanitization
     _.chain(_.keys(variable))
         .each(function(key){
@@ -332,7 +332,7 @@ function version(state) {
 
 
 function version_upgrade(state) {
-    var currentVersion = 3;
+    var currentVersion = 4;
     var stateVersion = version(state);
     if (stateVersion<currentVersion) {
         switch (stateVersion) {
@@ -353,7 +353,12 @@ function version_upgrade(state) {
             delete state.population.waterConsumation;
 
             state.version = 3;
-            break;        
+            // FALLTHROUGH       
+        case 3:
+            delete state.log;
+
+            state.version = 4;
+            break;     
         default:
             log(sprintf("Unknown version: %d", stateVersion));
             log(sprintf("Current version: %d", currentVersion));
