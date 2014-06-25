@@ -199,9 +199,9 @@ function defineCalculations(state) {
     min = function(other_val, val) {return Math.min(getValue(other_val),val);};
     max = function(other_val, val) {return Math.max(getValue(other_val),val);};
 
-    state.autosave.counter.calculate = old;
-    state.autosave.counter.calculate = _.compose(incr, state.autosave.counter.calculate);
-    state.autosave.counter.calculate = _.compose(_.partial(modulo, state.autosave.counter.max), state.autosave.counter.calculate);
+    state.autosave.counter.calculate_loop = old;
+    state.autosave.counter.calculate_loop = _.compose(incr, state.autosave.counter.calculate_loop);
+    state.autosave.counter.calculate_loop = _.compose(_.partial(modulo, state.autosave.counter.max), state.autosave.counter.calculate_loop);
 
     state.water.rate.calculate = zero; // begin with zero (omit old value)
     state.water.rate.calculate = _.compose(_.partial(add_to, state.population, state.population.waterConsumation), state.water.rate.calculate);
@@ -210,11 +210,11 @@ function defineCalculations(state) {
     state.water.max.calculate = zero; // begin with zero (omit old value)
     state.water.max.calculate = _.compose(_.partial(add_to, state.water.reservoirs, state.water.reservoirs.effect), state.water.max.calculate);
 
-    state.water.calculate = old;
-    state.water.calculate = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate);
+    state.water.calculate_loop = old;
+    state.water.calculate_loop = _.compose(_.partial(add_to, state.water.rate, 1), state.water.calculate_loop);
 
-    state.population.calculate = old;
-    state.population.calculate = _.compose(function(pop){return (getValue(state.water)+getValue(state.water.rate)<0) ? pop-1 : pop;}, state.population.calculate);
+    state.population.calculate_loop = old;
+    state.population.calculate_loop = _.compose(function(pop){return (getValue(state.water)+getValue(state.water.rate)<0) ? pop-1 : pop;}, state.population.calculate_loop);
 
     state.population.max.calculate = zero;
     state.population.max.calculate = _.compose(_.partial(add_to, state.population.cabin, state.population.cabin.effect), state.population.max.calculate);
@@ -244,14 +244,14 @@ function defineCalculations(state) {
         resource.rate.calculate = _.compose(_.partial(add_to, resource.gatherer, resource.gatherer.effect), resource.rate.calculate);
         resource.rate.calculate = _.compose(_.partial(min, resource.nearby), resource.rate.calculate);
 
-        resource.calculate = old;
-        resource.calculate = _.compose(_.partial(add_to, resource.rate, 1), resource.calculate);
+        resource.calculate_loop = old;
+        resource.calculate_loop = _.compose(_.partial(add_to, resource.rate, 1), resource.calculate_loop);
 
         resource.gatherer.max.calculate = _.partial(value, state.population.unemployed);
         resource.gatherer.max.calculate = _.compose(_.partial(add_to, resource.gatherer, 1), resource.gatherer.max.calculate);
 
-        resource.nearby.calculate = old;
-        resource.nearby.calculate = _.compose(_.partial(sub_from, resource.rate, 1), resource.nearby.calculate);
+        resource.nearby.calculate_loop = old;
+        resource.nearby.calculate_loop = _.compose(_.partial(sub_from, resource.rate, 1), resource.nearby.calculate_loop);
 
         defineCalculationsJob(resource.gatherer);
     }
@@ -493,6 +493,9 @@ function getValue(variable) {
     if(_.isNumber(variable)) {
         return variable;
     }
+    if(variable.hasOwnProperty("calculate_value")) {
+
+    }
     if(variable.hasOwnProperty("current")) {
         return variable.current;
     }
@@ -590,17 +593,18 @@ function swim() {
     }
 }
 
-function apply_calculate_by_name(variable, name) {
+function calculate_by_name(variable, name) {
     if(variable.hasOwnProperty(name)){
         var value = null;
         if(variable[name].hasOwnProperty("input")){
-            value = getValue();
+            value = getValue(variable[name].input);
         } else {
-            // use old value as input
+            // use old value as input (be aware of cycles; dont use this with calculate_value)
             value = getValue(variable);
         }
-        setValue(variable, variable[name](getValue(variable)));
+        return value;
     }
+    return null;
 }
 function apply_calculate(variable) {
     if(variable.hasOwnProperty("calculate")){
@@ -631,14 +635,39 @@ function apply_calculate_on_job(job) {
 function apply_calculate_on_resource(resource) {
     apply_calculate(resource.rate);
     apply_calculate(resource.nearby.max);
-    apply_calculate(resource.nearby);
-    apply_calculate(resource);
 }
 function apply_calculate_on_resource_and_gatherer(resource) {
     apply_calculate_on_job(resource.gatherer);
     apply_calculate_on_resource(resource);
 }
+function apply_calculates(state) {
+    apply_calculate(state.water.rate);
 
+    apply_calculate(state.water.max);
+    apply_calculate(state.water.rate);
+
+    apply_calculate_on_resource_and_gatherer(state.plastic);
+    apply_calculate_on_resource_and_gatherer(state.planks);
+    
+    apply_calculate_on_job(state.sight.lookout);
+
+    apply_calculate(state.population.max);
+    apply_calculate(state.population.unemployed);
+
+    apply_calculate(state.sight);
+
+    apply_calculate(state.space);
+    apply_calculate(state.space.available);
+}
+function apply_loop_calculates(state) {
+    apply_calculate_suffix(state.autosave.counter,"loop");
+    apply_calculate_suffix(state.plastic,"loop");
+    apply_calculate_suffix(state.planks,"loop");
+    apply_calculate_suffix(state.plastic.nearby,"loop");
+    apply_calculate_suffix(state.planks.nearby,"loop");
+    apply_calculate_suffix(state.water,"loop");
+    apply_calculate_suffix(state.population,"loop");
+}
 // game loop ======================================================================================
 function loop() {
     // Autosave
@@ -647,24 +676,9 @@ function loop() {
         save();
     }
     // Calculations
-    apply_calculate(state.water.max);
-    apply_calculate(state.water.rate);
-    apply_calculate(state.water);
-    apply_calculate(state.autosave.counter);
+    apply_calculates(state);
+    apply_loop_calculates(state);
 
-    apply_calculate_on_resource_and_gatherer(state.plastic);
-    apply_calculate_on_resource_and_gatherer(state.planks);
-    
-    apply_calculate_on_job(state.sight.lookout);
-
-    apply_calculate(state.population.max);
-    apply_calculate(state.population);
-    apply_calculate(state.population.unemployed);
-
-    apply_calculate(state.sight);
-
-    apply_calculate(state.space);
-    apply_calculate(state.space.available);
 
     // Display
     displayAll();
