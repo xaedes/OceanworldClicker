@@ -594,7 +594,7 @@ function swim() {
                 log_and_dialog("You greet the survivor and you see something interesting he holds in his hands.");
                 state.dialog.optionA = function() {
                     clearDialog();
-                    log_and_dialog("You: Behold fello, what is this most interesting there you hold?");
+                    log_and_dialog("You: Behold fello, what is this most interesting thing there you hold?");
                     log_and_dialog("Stranger: ....");
                 };
                 setVisibleInline("optionA");
