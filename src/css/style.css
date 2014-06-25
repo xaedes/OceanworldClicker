@@ -1,6 +1,6 @@
 
 body {
-    font-family: sans, Arial;
+    font-family: 'Comic Neue', sans, Arial;
     font-weight: 400;
 }
 button {
@@ -11,18 +11,21 @@ button {
     border-color: black;
     background-color: white;
     box-shadow: 2px 2px 0px 0px rgba(36, 36, 36, 0.5);
-    font-family: sans, Arial;
-    font-weight: 600;
+    font-family: 'Comic Neue', Arial;
+    font-size: 14px;
+    font-weight: 800;
 }
 
 h1 {
-    font-size: 1.4em;
-    font-weight: 800;
+    font-size: 2em;
+    font-family: 'Kaushan Script';
+    font-weight: 400;
 }
 
 h2 {
-    font-size: 1.0em;
-    font-weight: 800;
+    font-size: 1.3em;
+    font-family: 'Kaushan Script';
+    font-weight: 400;
 }
 
 .fa {
@@ -33,7 +36,7 @@ h2 {
     border: 1px solid black;
     padding: 5px;
     width: 99%;
-    height: 300px;
+    height: 400px;
     overflow: auto;
 }
 
