@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'clearsans';
+    src: url('ClearSans-Regular-webfont.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'clearsans';
+    src:         url('ClearSans-Italic-webfont.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'clearsans';
+    src: url('ClearSans-Bold-webfont.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'clearsans';
+    src: url('ClearSans-Light-webfont.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'clearsans';
+    src: url('ClearSans-Medium-webfont.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
