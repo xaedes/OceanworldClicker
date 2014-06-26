@@ -83,7 +83,7 @@ function defineDefaultData(state) {
 
     state.sight.lookout = {};
     state.sight.lookout.current = 0;
-    state.sight.lookout.effect = 10;
+    state.sight.lookout.effect = 5;
     state.sight.lookout.min = 0;
     state.sight.lookout.max = {};
     state.sight.lookout.max.current = 0;
