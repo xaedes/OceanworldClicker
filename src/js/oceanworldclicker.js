@@ -171,7 +171,7 @@ function defineDefaultData(state) {
     state.water.reservoirs.size = 1;
 
     state.dialog = {};
-
+    
 
     return state;
 }
@@ -279,6 +279,11 @@ function defineCalculations(state) {
 function defineNonData(state) {
     defineBuilds(state);
     defineCalculations(state);
+
+    state.dialog.dismiss = function() {
+        clearDialog();
+        setHidden('dialog_options');
+    };
 
     return state;
 }
@@ -584,7 +589,8 @@ function swim() {
     apply_calculate_suffix(state.planks.nearby,"swim");
 
     clearDialog();
-    dismiss()
+    setHidden("optionA");
+    state.dialog.dismiss();
     if(Math.random() < state.population.findSurvivorProbability) {
         log("Found new survivor!");
         if(getValue(state.population.max)-getValue(state.population) > 0){
@@ -600,6 +606,14 @@ function swim() {
                 setVisibleInline("optionA");
                 setInnerHTML("optionA","Ask him about it.");
                 setDisabled("swim");
+
+                var oldDismiss = state.dialog.dismiss;
+                state.dialog.dismiss = function() {
+                    setEnabled("swim");
+                    oldDismiss();
+
+                    state.dialog.dismiss = oldDismiss;
+                };
             }
         } else {
             dialog("Found new survivor!");
