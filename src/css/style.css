@@ -85,3 +85,8 @@ h2 {
 button {
     display: inline;
 }
+button[disabled] {
+    border-color: silver;
+    box-shadow: 2px 2px 0px 0px rgba(36, 36, 36, 0.3);
+    color: #B6B6B6;
+}
