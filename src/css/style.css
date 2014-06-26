@@ -96,3 +96,7 @@ button[disabled] {
     color: #B6B6B6;
     cursor: default;
 }
+
+.resources_low {
+    color: #a00;
+}
