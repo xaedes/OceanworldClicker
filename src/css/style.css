@@ -47,6 +47,9 @@ h2 {
 
 #log .time {
 	color: #666;
+    width: 4em;
+    display: block;
+    float: left;
 }
 
 #buildings td {
