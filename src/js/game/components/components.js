@@ -16,6 +16,7 @@ define([
     'game/components/refreshonmodify',
     'game/components/caption',
     'game/components/storeinsavegame',
+    'game/components/saveorder',
     'ash'
 ], function (
     Refresh,
@@ -35,6 +36,7 @@ define([
     RefreshOnModify,
     Caption,
     StoreInSaveGame,
+    SaveOrder,
     Ash
 ) {
     var Components = {
@@ -55,6 +57,7 @@ define([
         RefreshOnModify: RefreshOnModify,
         Caption: Caption,
         StoreInSaveGame: StoreInSaveGame,
+        SaveOrder: SaveOrder,
     };
 
     return Components;

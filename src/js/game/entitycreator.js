@@ -63,9 +63,18 @@ define([
             var resource = new Ash.Entity()
                 .add(new Components.Interval(interval))
                 .add(new Components.RateTick())
-                .add(new Components.CleanTick());
+                .add(new Components.CleanTick())
+                ;
             this.game.addEntity(resource);
+            return resource;
         },
+        createSaveOrder: function() {
+            var entity = new Ash.Entity()
+                .add(new Components.SaveOrder())
+                ;
+            this.game.addEntity(entity);
+            return entity;
+        }
 
     });
 

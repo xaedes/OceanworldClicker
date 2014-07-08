@@ -7,6 +7,7 @@ define([
     'game/systems/intervalsystem',    
     'game/systems/ratesystem',    
     'game/systems/maxsystem',    
+    'game/systems/savegamesystem',    
     'game/systems/refreshonmodifysystem',    
     'game/systems/systempriorities',    
     'game/components/components',    
@@ -21,6 +22,7 @@ define([
     IntervalSystem,
     RateSystem,
     MaxSystem,
+    SaveGameSystem,
     RefreshOnModifySystem,
     SystemPriorities,
     Components,
@@ -67,12 +69,20 @@ define([
                 new CleanTickSystem(),
                 SystemPriorities.cleantick
             );
+            this.engine.addSystem(
+                new SaveGameSystem(this.creator),
+                SystemPriorities.cleantick
+            );
 
             this.water = this.creator.createWaterResource();
             this.population = this.creator.createPopulationResource();
             this.sight = this.creator.createSightResource();
 
             this.tickProvider = new TickProvider(null);
+        },
+
+        save: function () {
+            this.creator.createSaveOrder();
         },
 
         start: function () {
