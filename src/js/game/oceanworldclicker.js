@@ -6,6 +6,8 @@ define([
     'game/systems/cleanticksystem',    
     'game/systems/intervalsystem',    
     'game/systems/ratesystem',    
+    'game/systems/maxsystem',    
+    'game/systems/refreshonmodifysystem',    
     'game/systems/systempriorities',    
     'game/components/components',    
     'brejep/tickprovider',
@@ -18,6 +20,8 @@ define([
     CleanTickSystem,
     IntervalSystem,
     RateSystem,
+    MaxSystem,
+    RefreshOnModifySystem,
     SystemPriorities,
     Components,
     TickProvider,
@@ -48,8 +52,16 @@ define([
                 SystemPriorities.only
             );
             this.engine.addSystem(
-                new RateSystem(this.tick),
+                new RateSystem(),
                 SystemPriorities.only
+            );
+            this.engine.addSystem(
+                new MaxSystem(),
+                SystemPriorities.contraints
+            );
+            this.engine.addSystem(
+                new RefreshOnModifySystem(),
+                SystemPriorities.refreshonmodify
             );
             this.engine.addSystem(
                 new CleanTickSystem(),

@@ -34,9 +34,6 @@ define([
             if( ! node.entity.has(Components.Modified)) {
                 node.entity.add(new Components.Modified());
             }
-            if( ! node.entity.has(Components.Refresh)) {
-                node.entity.add(new Components.Refresh());
-            }
         },
         tick: function (tickNode) {
             for(var rateNode = this.rateNodes.head; rateNode; rateNode = rateNode.next) {

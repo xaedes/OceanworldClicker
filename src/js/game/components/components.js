@@ -13,6 +13,7 @@ define([
     'game/components/ratetick',
     'game/components/cleantick',
     'game/components/modified',
+    'game/components/refreshonmodify',
     'ash'
 ], function (
     Refresh,
@@ -29,6 +30,7 @@ define([
     RateTick,
     CleanTick,
     Modified,
+    RefreshOnModify,
     Ash
 ) {
     var Components = {
@@ -46,6 +48,7 @@ define([
         RateTick: RateTick,
         CleanTick: CleanTick,
         Modified: Modified,
+        RefreshOnModify: RefreshOnModify,
     };
 
     return Components;

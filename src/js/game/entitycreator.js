@@ -27,6 +27,7 @@ define([
                 .add(new Components.Value(value))
                 .add(new Components.Name(name))
                 .add(new Components.Refresh())
+                .add(new Components.RefreshOnModify())
                 ;
             if(addEntity){
                 this.game.addEntity(resource);
@@ -43,7 +44,7 @@ define([
         createWaterResource: function() {
             var resource = this.createResource(false,0,"Drinkable Water","%.2f")
                 .add(new Components.Max(10))
-                .add(new Components.Rate(0.5))
+                .add(new Components.Rate(1.5))
                 ;
             this.game.addEntity(resource);
             return resource;
