@@ -1,22 +1,10 @@
 define([
     'ash',
-    'game/components/display',
-    'game/components/resource',
-    'game/components/uid',
-    'game/components/value',
-    'game/components/max',
-    'game/components/name',
-    'game/components/dirty',
+    'game/components/components',
     'brejep/keyboard'
 ], function (
     Ash,
-    Display,
-    Resource,
-    UID,
-    Value,
-    Max,
-    Name,
-    Dirty,
+    Components,
     Keyboard
 ) {
 
@@ -33,13 +21,13 @@ define([
 
         createWaterResource: function() {
             var water = new Ash.Entity()
-                .add(new Display())
-                .add(new Resource())
-                .add(new UID())
-                .add(new Value(0))
-                .add(new Max(10))
-                .add(new Name("Drinkable Water"))
-                .add(new Dirty())
+                .add(new Components.Display())
+                .add(new Components.Resource())
+                .add(new Components.UID())
+                .add(new Components.Value(0))
+                .add(new Components.Max(10))
+                .add(new Components.Name("Drinkable Water"))
+                .add(new Components.Dirty())
                 ;
             this.game.addEntity(water);
             return water;
