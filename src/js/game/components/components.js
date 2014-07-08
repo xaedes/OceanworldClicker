@@ -6,6 +6,8 @@ define([
     'game/components/resource',
     'game/components/uid',
     'game/components/value',
+    'game/components/rate',
+    'game/components/prepend',
     'ash'
 ], function (
     Dirty,
@@ -15,6 +17,8 @@ define([
     Resource,
     UID,
     Value,
+    Rate,
+    Prepend,
     Ash
 ) {
     var Components = {
@@ -24,7 +28,9 @@ define([
         Name: Name,
         Resource: Resource,
         UID: UID,
-        Value: Value
+        Value: Value,
+        Rate: Rate,
+        Prepend: Prepend
     };
 
     return Components;

@@ -8,10 +8,7 @@ define([
     var ResourceDisplaySchema = {
         resource : Components.Resource,
         display : Components.Display,
-        uid : Components.UID,
-        value : Components.Value,
-        max : Components.Max,
-        name : Components.Name
+        uid : Components.UID
     };
 
     return ResourceDisplaySchema;

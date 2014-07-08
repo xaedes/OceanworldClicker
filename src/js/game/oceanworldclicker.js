@@ -38,6 +38,7 @@ define([
 
             this.water = this.creator.createWaterResource();
             this.population = this.creator.createPopulationResource();
+            this.sight = this.creator.createSightResource();
 
             this.tickProvider = new TickProvider(null);
         },

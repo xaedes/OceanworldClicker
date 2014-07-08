@@ -2,10 +2,10 @@ define([
     'ash', 
     'game/nodes/resourcedisplay', 
     'game/nodes/resourcedisplaydirty', 
-    'game/components/dirty',
+    'game/components/components',
     'jquery', 
     'sprintf'
-], function (Ash, ResourceDisplayNode, ResourceDisplayNodeDirty, Dirty, $, sp) {
+], function (Ash, ResourceDisplayNode, ResourceDisplayNodeDirty, Components, $, sp) {
     var ResourceDisplaySystem = Ash.System.extend({
         gamewrapper: null,
         resourcedisplay: null,
@@ -40,16 +40,28 @@ define([
         },
 
         addToDisplay: function (node) {
-            this.resourcedisplay.append(""
-                +sp.sprintf("<tr id='resource_%d'>",node.uid.uid)
-                    +"<td class='name'>"
-                    +"</td>"
-                    +"<td>"
-                        +"<span class='value'></span>"
-                        +" / "
-                        +"<span class='max'></span>"
-                    +"</td>"
-                +"</tr>");
+            var html = "";
+            var valuedisplayhtml = "<td class='valuedisplay'>";
+            if(node.entity.has(Components.Prepend)){
+                valuedisplayhtml+="<span class='prepend'></span>";
+            }
+            if(node.entity.has(Components.Value)){
+                valuedisplayhtml+="<span class='value'></span>";
+            }
+            if(node.entity.has(Components.Max)){
+                valuedisplayhtml+=" / <span class='max'></span>";
+            }
+            if(node.entity.has(Components.Rate)){
+                valuedisplayhtml+=" (<span class='rate'></span>/s)";
+            }
+            valuedisplayhtml+="</td>";
+            html+=sp.sprintf("<tr id='resource_%d'>",node.uid.uid)
+                    +"<td class='name'></td>"
+                    +valuedisplayhtml
+                +"</tr>";  
+            
+            this.resourcedisplay.append(html);
+
             this.updateNode(node);
         },
 
@@ -59,13 +71,25 @@ define([
 
         updateNode: function(node) {
             var tr = this.resourcedisplay.find("#resource_"+node.uid.uid)
-            tr.find(".name").text(sprintf("%s",node.name.name));
-            tr.find(".value").text(sprintf(node.display.format,node.value.value));
-            tr.find(".max").text(sprintf(node.display.format,node.max.max));
+            if(node.entity.has(Components.Prepend)){
+                tr.find(".prepend").text(sprintf("%s",node.entity.get(Components.Prepend).prepend));
+            }
+            if(node.entity.has(Components.Name)){
+                tr.find(".name").text(sprintf("%s",node.entity.get(Components.Name).name));
+            }
+            if(node.entity.has(Components.Value)){
+                tr.find(".value").text(sprintf(node.display.format,node.entity.get(Components.Value).value));
+            }
+            if(node.entity.has(Components.Max)){
+               tr.find(".max").text(sprintf(node.display.format,node.entity.get(Components.Max).max));
+            }
+            if(node.entity.has(Components.Rate)){
+                tr.find(".rate").text(sprintf("%.2f",node.entity.get(Components.Rate).rate));
+            }
 
             // remove Dirty flag to avoid unnecessary updates
-            if(node.entity.has(Dirty)) {
-                node.entity.remove(Dirty);
+            if(node.entity.has(Components.Dirty)) {
+                node.entity.remove(Components.Dirty);
             }
         },
 

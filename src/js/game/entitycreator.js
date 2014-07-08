@@ -19,27 +19,41 @@ define([
             this.game.removeEntity(entity);
         },
 
-        createResource: function(value,max,name,format) {
+        createResource: function(addEntity,value,name,format) {
             var resource = new Ash.Entity()
                 .add(new Components.Display(format))
                 .add(new Components.Resource())
                 .add(new Components.UID())
                 .add(new Components.Value(value))
-                .add(new Components.Max(max))
                 .add(new Components.Name(name))
                 .add(new Components.Dirty())
                 ;
-            
+            if(addEntity){
+                this.game.addEntity(resource);
+            }
+            return resource;
+        },
+        createSightResource: function() {
+            var resource = this.createResource(false,0,"Sight","%d")
+                .add(new Components.Prepend("ca. "))
+                ;
             this.game.addEntity(resource);
             return resource;
         },
         createWaterResource: function() {
-            var water = this.createResource(0,10,"Drinkable Water","%.2f");
-            return water;
+            var resource = this.createResource(false,0,"Drinkable Water","%.2f")
+                .add(new Components.Max(10))
+                .add(new Components.Rate(0.5))
+                ;
+            this.game.addEntity(resource);
+            return resource;
         },
         createPopulationResource: function() {
-            var pop = this.createResource(0,10,"Population","%d");
-            return pop;
+            var resource = this.createResource(false,0,"Population","%d")
+                .add(new Components.Max(10))
+                ;
+            this.game.addEntity(resource);
+            return resource;
         },
 
     });
