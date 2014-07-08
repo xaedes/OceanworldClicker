@@ -7,3 +7,10 @@
 [submodule "src/js/dist/lzstring"]
 	path = src/js/dist/lzstring
 	url = https://github.com/pieroxy/lz-string/
+[submodule "src/js/dist/ash-js"]
+	path = src/js/dist/ash-js
+	url = git@github.com:brejep/ash-js.git
+
+[submodule "src/js/dist/ashjs-asteroids"]
+	path = src/js/dist/ashjs-asteroids
+	url = git@github.com:brejep/ashjs-asteroids-example.git
