@@ -1,5 +1,5 @@
 define([
-    'game/components/dirty',
+    'game/components/refresh',
     'game/components/display',
     'game/components/max',
     'game/components/name',
@@ -10,7 +10,7 @@ define([
     'game/components/prepend',
     'ash'
 ], function (
-    Dirty,
+    Refresh,
     Display,
     Max,
     Name,
@@ -22,7 +22,7 @@ define([
     Ash
 ) {
     var Components = {
-        Dirty: Dirty,
+        Refresh: Refresh,
         Display: Display,
         Max: Max,
         Name: Name,

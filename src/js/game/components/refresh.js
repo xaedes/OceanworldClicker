@@ -1,8 +1,8 @@
 define(['ash'], function (Ash) {
-    var Dirty = Ash.Class.extend({
+    var Refresh = Ash.Class.extend({
         constructor: function () {
         }
     });
 
-    return Dirty;
+    return Refresh;
 });

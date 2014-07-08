@@ -9,9 +9,9 @@ define([
     ResourceDisplaySchema,
     Components
 ) {
-    var ResourceDisplayDirty = Ash.Node.create($.extend({},ResourceDisplaySchema,{
-        dirty : Components.Dirty
+    var ResourceDisplayRefresh = Ash.Node.create($.extend({},ResourceDisplaySchema,{
+        dirty : Components.Refresh
     }));
 
-    return ResourceDisplayDirty;
+    return ResourceDisplayRefresh;
 });

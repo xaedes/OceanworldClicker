@@ -26,7 +26,7 @@ define([
                 .add(new Components.UID())
                 .add(new Components.Value(value))
                 .add(new Components.Name(name))
-                .add(new Components.Dirty())
+                .add(new Components.Refresh())
                 ;
             if(addEntity){
                 this.game.addEntity(resource);

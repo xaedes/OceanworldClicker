@@ -1,16 +1,16 @@
 define([
     'ash', 
     'game/nodes/resourcedisplay', 
-    'game/nodes/resourcedisplaydirty', 
+    'game/nodes/resourcedisplayrefresh', 
     'game/components/components',
     'jquery', 
     'sprintf'
-], function (Ash, ResourceDisplayNode, ResourceDisplayNodeDirty, Components, $, sp) {
+], function (Ash, ResourceDisplayNode, ResourceDisplayNodeRefresh, Components, $, sp) {
     var ResourceDisplaySystem = Ash.System.extend({
         gamewrapper: null,
         resourcedisplay: null,
         nodes: null,
-        nodesDirty: null,
+        nodesRefresh: null,
 
         constructor: function (gamewrapper) {
             this.gamewrapper = gamewrapper;
@@ -27,12 +27,12 @@ define([
             this.nodes.nodeAdded.add(this.addToDisplay, this);
             this.nodes.nodeRemoved.add(this.removeFromDisplay, this);
 
-            this.nodesDirty = engine.getNodeList(ResourceDisplayNodeDirty);
-            for(var node = this.nodesDirty.head; node; node = node.next) {
+            this.nodesRefresh = engine.getNodeList(ResourceDisplayNodeRefresh);
+            for(var node = this.nodesRefresh.head; node; node = node.next) {
                 this.updateNode(node);
             }
 
-            this.nodesDirty.nodeAdded.add(this.updateNode, this); // immediate update
+            this.nodesRefresh.nodeAdded.add(this.updateNode, this); // immediate update
         },
 
         removeFromEngine: function (engine) {
@@ -87,16 +87,16 @@ define([
                 tr.find(".rate").text(sprintf("%.2f",node.entity.get(Components.Rate).rate));
             }
 
-            // remove Dirty flag to avoid unnecessary updates
-            if(node.entity.has(Components.Dirty)) {
-                node.entity.remove(Components.Dirty);
+            // remove Refresh flag to avoid unnecessary updates
+            if(node.entity.has(Components.Refresh)) {
+                node.entity.remove(Components.Refresh);
             }
         },
 
         update: function (time) {
             var node;
 
-            for (node = this.nodesDirty.head; node; node = node.next) {
+            for (node = this.nodesRefresh.head; node; node = node.next) {
                 this.updateNode(node);
             }
         }
