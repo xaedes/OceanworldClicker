@@ -19,9 +19,7 @@ body {
 #resourcedisplay .max {
     
 }
-#resourcedisplay .max:before {
-    content: " / ";
-}
+
 
 
 

@@ -19,18 +19,27 @@ define([
             this.game.removeEntity(entity);
         },
 
-        createWaterResource: function() {
-            var water = new Ash.Entity()
-                .add(new Components.Display())
+        createResource: function(value,max,name,format) {
+            var resource = new Ash.Entity()
+                .add(new Components.Display(format))
                 .add(new Components.Resource())
                 .add(new Components.UID())
-                .add(new Components.Value(0))
-                .add(new Components.Max(10))
-                .add(new Components.Name("Drinkable Water"))
+                .add(new Components.Value(value))
+                .add(new Components.Max(max))
+                .add(new Components.Name(name))
                 .add(new Components.Dirty())
                 ;
-            this.game.addEntity(water);
+            
+            this.game.addEntity(resource);
+            return resource;
+        },
+        createWaterResource: function() {
+            var water = this.createResource(0,10,"Drinkable Water","%.2f");
             return water;
+        },
+        createPopulationResource: function() {
+            var pop = this.createResource(0,10,"Population","%d");
+            return pop;
         },
 
     });

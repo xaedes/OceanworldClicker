@@ -1,6 +1,8 @@
 define(['ash'], function (Ash) {
     var Display = Ash.Class.extend({
-        constructor: function () {
+        format: null,
+        constructor: function (format) {
+            this.format = format;
         }
     });
 

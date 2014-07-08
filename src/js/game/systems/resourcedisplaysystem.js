@@ -46,6 +46,7 @@ define([
                     +"</td>"
                     +"<td>"
                         +"<span class='value'></span>"
+                        +" / "
                         +"<span class='max'></span>"
                     +"</td>"
                 +"</tr>");
@@ -59,8 +60,8 @@ define([
         updateNode: function(node) {
             var tr = this.resourcedisplay.find("#resource_"+node.uid.uid)
             tr.find(".name").text(sprintf("%s",node.name.name));
-            tr.find(".value").text(sprintf("%.2f",node.value.value));
-            tr.find(".max").text(sprintf("%.2f",node.max.max));
+            tr.find(".value").text(sprintf(node.display.format,node.value.value));
+            tr.find(".max").text(sprintf(node.display.format,node.max.max));
 
             // remove Dirty flag to avoid unnecessary updates
             if(node.entity.has(Dirty)) {
