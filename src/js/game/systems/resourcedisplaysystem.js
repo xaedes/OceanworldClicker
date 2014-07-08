@@ -56,7 +56,7 @@ define([
             }
             valuedisplayhtml+="</td>";
             html+=sp.sprintf("<tr id='resource_%d'>",node.uid.uid)
-                    +"<td class='name'></td>"
+                    +"<td class='caption'></td>"
                     +valuedisplayhtml
                 +"</tr>";  
             
@@ -74,8 +74,8 @@ define([
             if(node.entity.has(Components.Prepend)){
                 tr.find(".prepend").text(sprintf("%s",node.entity.get(Components.Prepend).prepend));
             }
-            if(node.entity.has(Components.Name)){
-                tr.find(".name").text(sprintf("%s",node.entity.get(Components.Name).name));
+            if(node.entity.has(Components.Caption)){
+                tr.find(".caption").text(sprintf("%s",node.entity.get(Components.Caption).caption));
             }
             if(node.entity.has(Components.Value)){
                 tr.find(".value").text(sprintf(node.display.format,node.entity.get(Components.Value).value));

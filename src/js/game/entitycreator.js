@@ -19,15 +19,18 @@ define([
             this.game.removeEntity(entity);
         },
 
-        createResource: function(addEntity,value,name,format) {
+        createResource: function(addEntity,value,name,caption,format) {
+            var uid = new Components.UID();
             var resource = new Ash.Entity()
                 .add(new Components.Display(format))
                 .add(new Components.Resource())
-                .add(new Components.UID())
+                .add(uid)
                 .add(new Components.Value(value))
                 .add(new Components.Name(name))
+                .add(new Components.Caption(caption))
                 .add(new Components.Refresh())
                 .add(new Components.RefreshOnModify())
+                .add(new Components.StoreInSaveGame(name,[Components.Value]))
                 ;
             if(addEntity){
                 this.game.addEntity(resource);
@@ -35,14 +38,14 @@ define([
             return resource;
         },
         createSightResource: function() {
-            var resource = this.createResource(false,0,"Sight","%d")
+            var resource = this.createResource(false,0,"sight","Sight","%d")
                 .add(new Components.Prepend("ca. "))
                 ;
             this.game.addEntity(resource);
             return resource;
         },
         createWaterResource: function() {
-            var resource = this.createResource(false,0,"Drinkable Water","%.2f")
+            var resource = this.createResource(false,0,"water","Drinkable Water","%.2f")
                 .add(new Components.Max(10))
                 .add(new Components.Rate(1.5))
                 ;
@@ -50,7 +53,7 @@ define([
             return resource;
         },
         createPopulationResource: function() {
-            var resource = this.createResource(false,0,"Population","%d")
+            var resource = this.createResource(false,0,"population","Population","%d")
                 .add(new Components.Max(10))
                 ;
             this.game.addEntity(resource);

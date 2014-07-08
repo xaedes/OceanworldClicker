@@ -14,6 +14,8 @@ define([
     'game/components/cleantick',
     'game/components/modified',
     'game/components/refreshonmodify',
+    'game/components/caption',
+    'game/components/storeinsavegame',
     'ash'
 ], function (
     Refresh,
@@ -31,6 +33,8 @@ define([
     CleanTick,
     Modified,
     RefreshOnModify,
+    Caption,
+    StoreInSaveGame,
     Ash
 ) {
     var Components = {
@@ -49,6 +53,8 @@ define([
         CleanTick: CleanTick,
         Modified: Modified,
         RefreshOnModify: RefreshOnModify,
+        Caption: Caption,
+        StoreInSaveGame: StoreInSaveGame,
     };
 
     return Components;
