@@ -4,6 +4,7 @@ define([
     'game/entitycreator',    
     'game/systems/resourcedisplaysystem',    
     'game/systems/systempriorities',    
+    'game/components/components',    
     'brejep/tickprovider',
     'brejep/keypoll'
 ], function (
@@ -12,6 +13,7 @@ define([
     EntityCreator,
     ResourceDisplaySystem,
     SystemPriorities,
+    Components,
     TickProvider,
     KeyPoll
 ) {
@@ -26,6 +28,7 @@ define([
             this.engine = new Ash.Engine();
             this.gamewrapper = $(gamewrapper);
 
+            this.Components = Components;
             this.creator = new EntityCreator(this.engine);
 
             this.engine.addSystem(
@@ -33,7 +36,7 @@ define([
                 SystemPriorities.only
             );
 
-            this.creator.createWaterResource();
+            this.water = this.creator.createWaterResource();
 
             this.tickProvider = new TickProvider(null);
         },

@@ -17,13 +17,15 @@ require([
                 KeyPoll.initialise(window);
 
 
-                var oceanworldclicker = new OceanworldClicker(gamewrapper);
-                oceanworldclicker.start();
+                this.oceanworldclicker = new OceanworldClicker(gamewrapper);
+                this.oceanworldclicker.start();
             };
 
         }
 
         // start!
-        new OceanworldClickerApp().initialise();
+        var app = new OceanworldClickerApp();
+        window.app = app;
+        app.initialise();
     }
 );
