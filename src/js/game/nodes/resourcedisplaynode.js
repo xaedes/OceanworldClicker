@@ -5,7 +5,7 @@ define([
     Ash, 
     ResourceDisplaySchema
 ) {
-    var ResourceDisplay = Ash.Node.create(ResourceDisplaySchema);
+    var ResourceDisplayNode = Ash.Node.create(ResourceDisplaySchema);
 
-    return ResourceDisplay;
+    return ResourceDisplayNode;
 });

@@ -1,11 +1,11 @@
 define([
     'ash', 
-    'game/nodes/resourcedisplay', 
-    'game/nodes/resourcedisplayrefresh', 
+    'game/nodes/resourcedisplaynode', 
+    'game/nodes/resourcedisplayrefreshnode', 
     'game/components/components',
     'jquery', 
     'sprintf'
-], function (Ash, ResourceDisplayNode, ResourceDisplayNodeRefresh, Components, $, sp) {
+], function (Ash, ResourceDisplayNode, ResourceDisplayRefreshNode, Components, $, sp) {
     var ResourceDisplaySystem = Ash.System.extend({
         gamewrapper: null,
         resourcedisplay: null,
@@ -27,7 +27,7 @@ define([
             this.nodes.nodeAdded.add(this.addToDisplay, this);
             this.nodes.nodeRemoved.add(this.removeFromDisplay, this);
 
-            this.nodesRefresh = engine.getNodeList(ResourceDisplayNodeRefresh);
+            this.nodesRefresh = engine.getNodeList(ResourceDisplayRefreshNode);
             for(var node = this.nodesRefresh.head; node; node = node.next) {
                 this.updateNode(node);
             }
