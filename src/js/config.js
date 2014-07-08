@@ -13,7 +13,8 @@ require.config({
         ash: "dist/ash-js/build/ash",
         sprintf: "dist/sprintf.js/src/sprintf",
         underscore: "dist/underscore/underscore",
-        lzstring: "dist/lzstring/libs/lz-string-1.3.3"
+        lzstring: "dist/lzstring/libs/lz-string-1.3.3",
+        jquery: "dist/jquery/jquery-2.1.1"
     },
 
     // Sets the configuration for your third party scripts that are not AMD compatible
