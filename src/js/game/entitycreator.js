@@ -55,6 +55,13 @@ define([
             this.game.addEntity(resource);
             return resource;
         },
+        createTickGenerator: function(interval) {
+            var resource = new Ash.Entity()
+                .add(new Components.Interval(interval))
+                .add(new Components.RateTick())
+                .add(new Components.CleanTick());
+            this.game.addEntity(resource);
+        },
 
     });
 

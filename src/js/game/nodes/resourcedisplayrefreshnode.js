@@ -10,7 +10,7 @@ define([
     Components
 ) {
     var ResourceDisplayRefreshNode = Ash.Node.create($.extend({},ResourceDisplaySchema,{
-        dirty : Components.Refresh
+        refresh : Components.Refresh
     }));
 
     return ResourceDisplayRefreshNode;

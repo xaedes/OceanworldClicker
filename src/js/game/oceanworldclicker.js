@@ -3,6 +3,9 @@ define([
     'jquery',
     'game/entitycreator',    
     'game/systems/resourcedisplaysystem',    
+    'game/systems/cleanticksystem',    
+    'game/systems/intervalsystem',    
+    'game/systems/ratesystem',    
     'game/systems/systempriorities',    
     'game/components/components',    
     'brejep/tickprovider',
@@ -12,6 +15,9 @@ define([
     $,
     EntityCreator,
     ResourceDisplaySystem,
+    CleanTickSystem,
+    IntervalSystem,
+    RateSystem,
     SystemPriorities,
     Components,
     TickProvider,
@@ -31,9 +37,23 @@ define([
             this.Components = Components;
             this.creator = new EntityCreator(this.engine);
 
+            this.tick = this.creator.createTickGenerator(1.0);
+
             this.engine.addSystem(
                 new ResourceDisplaySystem(this.gamewrapper),
                 SystemPriorities.only
+            );
+            this.engine.addSystem(
+                new IntervalSystem(),
+                SystemPriorities.only
+            );
+            this.engine.addSystem(
+                new RateSystem(this.tick),
+                SystemPriorities.only
+            );
+            this.engine.addSystem(
+                new CleanTickSystem(),
+                SystemPriorities.cleantick
             );
 
             this.water = this.creator.createWaterResource();

@@ -8,6 +8,11 @@ define([
     'game/components/value',
     'game/components/rate',
     'game/components/prepend',
+    'game/components/interval',
+    'game/components/intervaltick',
+    'game/components/ratetick',
+    'game/components/cleantick',
+    'game/components/modified',
     'ash'
 ], function (
     Refresh,
@@ -19,6 +24,11 @@ define([
     Value,
     Rate,
     Prepend,
+    Interval,
+    IntervalTick,
+    RateTick,
+    CleanTick,
+    Modified,
     Ash
 ) {
     var Components = {
@@ -30,7 +40,12 @@ define([
         UID: UID,
         Value: Value,
         Rate: Rate,
-        Prepend: Prepend
+        Prepend: Prepend,
+        Interval: Interval,
+        IntervalTick: IntervalTick,
+        RateTick: RateTick,
+        CleanTick: CleanTick,
+        Modified: Modified,
     };
 
     return Components;
