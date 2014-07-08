@@ -3,6 +3,31 @@ body {
     font-family: 'Comic Neue', sans, Arial;
     font-weight: 400;
 }
+
+
+#resourcedisplay .name {
+    padding-left: 5px;
+    padding-right: 15px;
+}
+
+#resourcedisplay .name:after {
+    content: ":";
+}
+#resourcedisplay .value {
+
+}
+#resourcedisplay .max {
+    
+}
+#resourcedisplay .max:before {
+    content: " / ";
+}
+
+
+
+
+
+
 button {
     border-radius: 8px;
     padding: 4px 6px;
