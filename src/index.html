@@ -3,14 +3,11 @@
 <head>
     <title>OceanWorldClicker</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="./fonts/ComicNeue/comicneue.css">
-    <link rel="stylesheet" href="./fonts/fontawesome/font-awesome.css" type="text/css" charset="utf-8" />
-    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="js/dist/sprintf.js/src/sprintf.js"></script>
-    <script type="text/javascript" src="js/dist/underscore/underscore.js"></script>
-
-    <script type="text/javascript" src="js/dist/lzstring/libs/lz-string-1.3.3.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="./fonts/ComicNeue/comicneue.css"> -->
+    <!-- <link rel="stylesheet" href="./fonts/fontawesome/font-awesome.css" type="text/css" charset="utf-8" /> -->
+    <!-- <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'> -->
     <!-- Google Analytics -->
+    <!-- 
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -20,135 +17,13 @@
     ga('create', 'UA-21509937-2', 'xaedes.de');
     ga('send', 'pageview');
     </script>
+    -->
     </head>
 <body>
-    <table style="width:100%;"><tr>
-    <td width="50%" valign="top">
-        <h1>OceanWorld</h1> 
-        <h2>Basic Resources</h2>
-        <table style="width:100%" id="buildings">
-            <tr>
-                <td>Drinkable Water:</td>
-                <td><span id="water"></span> / <span id="waterMax"></span> (<span id="waterRate"></span>/s)</td>
-            </tr>
-            <tr>
-                <td>Population:</td>
-                <td><span id="population"></span> / <span id="populationMax"></span></td>
-            </tr>
-            <tr>
-                <td>Sight:</td>
-                <td>ca. <span id="sight"></span> </td>
-            </tr>
-        </table>
+    <div id="game-wrapper"></div>
 
-        <div id="the_ocean"> 
-            <div id="dialog">
-                
-                <div id="msg">
-                </div>
-            </div>
-            <button onclick="swim(); displayAll();" id="swim")>Swim around</button> 
-            <span id="dialog_options">
-            <button onclick="state.dialog.optionA();" id="optionA" style="display: None;">A</button>
-            <button onclick="state.dialog.dismiss()" id="dismiss">dismiss</button>
-            </span>
-        </div>
-        <h2>Building Materials</h2>
-        <table style="width:100%" id="resources">
-            <colgroup>
-                <col width="15%"></col>
-                <col width="25%"></col>
-                <col width="15%"></col>
-                <col width="45%"></col>
-            </colgroup>
-            <tr>
-                <td><button onclick="increment(state.plastic,1); displayPlastic(); displayBuildings();")>Gather</button></td>
-                <td><i class="fa fa-database"></i>Plastic: </td>
-                <td><span id="plastic"></span> (<span id="plasticRate"></span>/s)</td>
-                <td>from <span id="plasticNearby"></span> nearby</td>
-            </tr>
-            <tr>
-                <td><button onclick="increment(state.planks,1); displayPlanks(); displayBuildings();")>Gather</button></td>
-                <td><i class="fa fa-bars fa-rotate-90"></i>Planks: </td>
-                <td><span id="planks"></span> (<span id="planksRate"></span>/s)</td>
-                <td>from <span id="planksNearby"></span> nearby</td>
-            </tr>
-        </table>
-        <h2>Buildings</h2>
-        <table style="width:100%" id="buildings">
-            <colgroup>
-                <col width="15%"></col>
-                <col width="25%"></col>
-                <col width="15%"></col>
-                <col width="45%"></col>
-            </colgroup>
-            <tr>
-                <td></td>
-                <td>Available Space: </td>
-                <td><span id="availableSpace"></span>/<span id="space"></span></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><button onclick="build(state.space.enlargements.build,1); apply_calculate(state.space); apply_calculate(state.space.available); displayAll();") id="buildShipEnlargements">Build</button></td>
-                <td>Ship Enlargements: </td>
-                <td><span id="shipEnlargements"></span></td>
-                <td><span id="shipEnlargementsCost"></span></td>
-            </tr>
-            <tr>
-                <td><button onclick="build(state.population.cabin.build,1); apply_calculate(state.population.max); apply_calculate(state.population.unemployed); apply_calculate(state.space.available); displayAll();") id="buildCabin">Build</button></td>
-                <td>Cabin: </td>
-                <td><span id="cabins"></span></td>
-                <td><span id="cabinsCost"></span>: +<span id="cabinsEffect"></span> population</td>
-            </tr>
-            <tr>
-                <td><button onclick="build(state.water.reservoirs.build,1); apply_calculate(state.water.max); apply_calculate(state.space.available); displayAll();") id="buildWaterReservoirs">Build</button></td>
-                <td>Water Reservoirs: </td>
-                <td><span id="waterReservoirs"></span></td>
-                <td><span id="waterReservoirsCost"></span>: +<span id="waterReservoirsEffect"></span> water</td>
-            </tr>
-            <tr>
-                <td><button onclick="build(state.water.supplies.build,1); apply_calculate(state.water.rate); apply_calculate(state.space.available); displayAll();") id="buildWaterSupplies">Build</button></td>
-                <td>Water Supplies: </td>
-                <td><span id="waterSupplies"></span></td>
-                <td><span id="waterSuppliesCost"></span>: +<span id="waterSuppliesEffect"></span> water/s</td>
-            </tr>
-        </table>
-        <h2>Jobs</h2>
-        <table style="width:100%" id="jobs">
-            <tr>
-                <td></td>
-                <td>Unemployed: </td>
-                <td><span id="unemployed"></span></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><button onclick="decrement(state.sight.lookout,1); apply_calculate(state.sight); apply_calculate(state.population.unemployed); displaySight(); displayJobs();")>&lt;</button></td>
-                <td>Lookout: </td>
-                <td><span id="lookout"></span></td>
-                <td><button onclick="increment(state.sight.lookout,1); apply_calculate(state.sight); apply_calculate(state.population.unemployed); displaySight(); displayJobs();")>&gt;</button></td>
-            </tr>
-            <tr>
-                <td><button onclick="decrement(state.plastic.gatherer,1); apply_calculate(state.plastic.rate); apply_calculate(state.population.unemployed); displayPlastic(); displayJobs();")>&lt;</button></td>
-                <td>Plastic Gatherer: </td>
-                <td><span id="plasticGatherer"></span></td>
-                <td><button onclick="increment(state.plastic.gatherer,1); apply_calculate(state.plastic.rate); apply_calculate(state.population.unemployed); displayPlastic(); displayJobs();")>&gt;</button></td>
-            </tr>
-            <tr>
-                <td><button onclick="decrement(state.planks.gatherer,1); apply_calculate(state.planks.rate); apply_calculate(state.population.unemployed); displayPlanks(); displayJobs();")>&lt;</button></td>
-                <td>Plank Gatherer: </td>
-                <td><span id="planksGatherer"></span></td>
-                <td><button onclick="increment(state.planks.gatherer,1); apply_calculate(state.planks.rate); apply_calculate(state.population.unemployed); displayPlanks(); displayJobs();")>&gt;</button></td>
-            </tr>
-        </table>
-    </td>
-    <td width="50%" valign="top">
-        <div id="log"></div>
-        <button id="resetGame" onclick="resetGame();displayAll();">Reset</button>
-        <button id="saveGame" onclick="save(); log('Saved game.');displayAll();">Save</button>
-    </td>
-    </table>
-
-
-    <script type="text/javascript" src="js/oceanworldclicker.js"></script>
+    <!-- RequireJS -->
+    <script data-main="js/config" src="js/dist/requirejs/require.min.js"></script>
+    <!-- <script type="text/javascript" src="js/oceanworldclicker.js"></script> -->
 </body>
 </html>
