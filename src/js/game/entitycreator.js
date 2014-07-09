@@ -74,6 +74,13 @@ define([
                 ;
             this.game.addEntity(entity);
             return entity;
+        },
+        createLogMsg: function(msg) {
+            var entity = new Ash.Entity()
+                .add(new Components.LogMessage(msg))
+                ;
+            this.game.addEntity(entity);
+            return entity;            
         }
 
     });

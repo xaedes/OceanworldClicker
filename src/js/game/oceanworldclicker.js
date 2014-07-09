@@ -9,6 +9,7 @@ define([
     'game/systems/maxsystem',    
     'game/systems/savegamesystem',    
     'game/systems/refreshonmodifysystem',    
+    'game/systems/logsystem',    
     'game/systems/systempriorities',    
     'game/components/components',    
     'brejep/tickprovider',
@@ -24,6 +25,7 @@ define([
     MaxSystem,
     SaveGameSystem,
     RefreshOnModifySystem,
+    LogSystem,
     SystemPriorities,
     Components,
     TickProvider,
@@ -73,12 +75,22 @@ define([
                 new SaveGameSystem(this.creator),
                 SystemPriorities.cleantick
             );
+            this.engine.addSystem(
+                new LogSystem(this.creator),
+                SystemPriorities.only
+            );
 
             this.water = this.creator.createWaterResource();
             this.population = this.creator.createPopulationResource();
             this.sight = this.creator.createSightResource();
 
             this.tickProvider = new TickProvider(null);
+
+            // export to window
+            var self = this;
+            window.log = function(msg) {
+                self.log(msg);
+            }
         },
 
         save: function () {
@@ -88,8 +100,18 @@ define([
         start: function () {
             this.tickProvider.add(this.engine.update, this.engine);
             this.tickProvider.start();
+        },
+
+        log: function(msg) {
+            this.creator.createLogMsg(msg);
         }
     });
+
+    // For the time now
+    // http://stackoverflow.com/a/10211214/798588
+    Date.prototype.timeNow = function () {
+         return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+    }
 
     return OceanworldClicker;
 });
