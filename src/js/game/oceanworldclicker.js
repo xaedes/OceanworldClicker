@@ -49,38 +49,14 @@ define([
 
             this.tick = this.creator.createTickGenerator(1.0);
 
-            this.engine.addSystem(
-                new ResourceDisplaySystem(this.gamewrapper),
-                SystemPriorities.only
-            );
-            this.engine.addSystem(
-                new IntervalSystem(),
-                SystemPriorities.only
-            );
-            this.engine.addSystem(
-                new RateSystem(),
-                SystemPriorities.only
-            );
-            this.engine.addSystem(
-                new MaxSystem(),
-                SystemPriorities.contraints
-            );
-            this.engine.addSystem(
-                new RefreshOnModifySystem(),
-                SystemPriorities.refreshonmodify
-            );
-            this.engine.addSystem(
-                new CleanTickSystem(),
-                SystemPriorities.cleantick
-            );
-            this.engine.addSystem(
-                new SaveGameSystem(this.creator),
-                SystemPriorities.cleantick
-            );
-            this.engine.addSystem(
-                new LogSystem(this.creator),
-                SystemPriorities.only
-            );
+            this.engine.addSystem( new ResourceDisplaySystem(this.gamewrapper), SystemPriorities.only);
+            this.engine.addSystem( new IntervalSystem(),                        SystemPriorities.only);
+            this.engine.addSystem( new RateSystem(),                            SystemPriorities.only);
+            this.engine.addSystem( new MaxSystem(),                             SystemPriorities.contraints);
+            this.engine.addSystem( new RefreshOnModifySystem(),                 SystemPriorities.refreshonmodify);
+            this.engine.addSystem( new CleanTickSystem(),                       SystemPriorities.cleantick);
+            this.engine.addSystem( new SaveGameSystem(this.creator),            SystemPriorities.cleantick);
+            this.engine.addSystem( new LogSystem(this.creator),                 SystemPriorities.only);
 
             this.water = this.creator.createWaterResource();
             this.population = this.creator.createPopulationResource();
