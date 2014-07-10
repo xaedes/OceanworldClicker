@@ -58,6 +58,7 @@ define([
         },
         createSightResource: function() {
             var entity = this.createResource(false,0,"sight","Sight","%d")
+                .add(new Components.Sight())
                 .add(new Components.Prepend("ca. "))
                 ;
             this.game.addEntity(entity);
@@ -126,6 +127,7 @@ define([
         },
         createShip: function() {
             var entity = new Ash.Entity()
+                .add(new Components.ProvidesSight(10))
                 ;
             this.game.addEntity(entity);
             return entity;

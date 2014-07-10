@@ -15,6 +15,7 @@ define([
     'game/systems/buildingmaterialdisplaysystem',    
     'game/systems/gathersystem',    
     'game/systems/swimaroundsystem',    
+    'game/systems/sightsystem',    
 
     'game/systems/systempriorities',    
     'game/components/components',    
@@ -37,6 +38,7 @@ define([
     BuildingMaterialDisplaySystem,
     GatherSystem,
     SwimAroundSystem,
+    SightSystem,
 
     SystemPriorities,
     Components,
@@ -59,8 +61,16 @@ define([
 
             this.tick = this.creator.createTickGenerator(1.0);
             this.tick.add(new Components.IntervalTick());
+            
+            this.water = this.creator.createWaterResource();
+            this.population = this.creator.createPopulationResource();
+            this.sight = this.creator.createSightResource();
+            this.plastic = this.creator.createPlasticBuildingMaterial();
+            this.planks = this.creator.createPlanksBuildingMaterial();
 
-            this.engine.addSystem( new SwimAroundSystem(),                              SystemPriorities.only);
+            this.ship = this.creator.createShip();
+
+            this.engine.addSystem( new SightSystem(),                                   SystemPriorities.only);
             this.engine.addSystem( new ResourceDisplaySystem(this.gamewrapper),         SystemPriorities.only);
             this.engine.addSystem( new BuildingMaterialDisplaySystem(this.gamewrapper), SystemPriorities.only);
             this.engine.addSystem( new IntervalSystem(),                                SystemPriorities.only);
@@ -69,17 +79,11 @@ define([
             this.engine.addSystem( new LogSystem(this.creator),                         SystemPriorities.only);
             this.engine.addSystem( new MaxSystem(),                                     SystemPriorities.contraints);
             this.engine.addSystem( new RefreshOnModifySystem(),                         SystemPriorities.refreshonmodify);
+            this.engine.addSystem( new SwimAroundSystem(this),                          SystemPriorities.swim);
             this.engine.addSystem( new ValueDisplaySystem(),                            SystemPriorities.display);
             this.engine.addSystem( new CleanTickSystem(),                               SystemPriorities.cleantick);
             this.engine.addSystem( new SaveGameSystem(this.creator),                    SystemPriorities.cleantick);
 
-            this.water = this.creator.createWaterResource();
-            this.population = this.creator.createPopulationResource();
-            this.sight = this.creator.createSightResource();
-            this.plastic = this.creator.createPlasticBuildingMaterial();
-            this.planks = this.creator.createPlanksBuildingMaterial();
-
-            this.ship = this.creator.createShip();
 
             this.tickProvider = new TickProvider(null);
 

@@ -6,9 +6,11 @@ define([
     'sprintf'
 ], function (Ash, SwimAroundNode, Components, $, sp) {
     var SwimAroundSystem = Ash.System.extend({
+        game: null,
         nodes: null,
 
-        constructor: function () {
+        constructor: function (game) {
+            this.game = game;
             return this;
         },
 

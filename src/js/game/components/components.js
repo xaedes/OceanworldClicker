@@ -25,6 +25,8 @@ define([
     'game/components/nearby',
     'game/components/gather',
     'game/components/swimaround',
+    'game/components/sight',
+    'game/components/providessight',
     'ash'
 ], function (
     Refresh,
@@ -53,6 +55,8 @@ define([
     Nearby,
     Gather,
     SwimAround,
+    Sight,
+    ProvidesSight,
     Ash
 ) {
     var Components = {
@@ -82,6 +86,8 @@ define([
         Nearby: Nearby,
         Gather: Gather,
         SwimAround: SwimAround,
+        Sight: Sight,
+        ProvidesSight: ProvidesSight,
 
         getName: function(componentClass) {
             var pairs = _.pairs(this);
