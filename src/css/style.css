@@ -51,21 +51,19 @@ button {
     font-weight: 800;
 }
 
-h1 {
-    font-size: 2em;
-    font-family: 'Kaushan Script';
+h1, h2 {
+    font-family: 'Indie Flower';
     font-weight: 400;
-    margin-top: 0;
     margin-bottom: 0;
     letter-spacing: 1px;
 }
 
+h1 {
+    font-size: 2em;
+}
+
 h2 {
     font-size: 1.3em;
-    font-family: 'Kaushan Script';
-    font-weight: 400;
-    margin-bottom: 0;
-    letter-spacing: 1px;
 }
 
 .fa {
