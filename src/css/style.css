@@ -136,3 +136,25 @@ button[disabled] {
 .resources_low {
     color: #e00;
 }
+
+
+
+#background {
+    /*opacity: 0.5; filter:Alpha(Opacity=50);*/
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    left: 0px;
+    top: 0px;
+    /*background-image: url(http://images.fineartamerica.com/images-medium-large/moonlight-at-the-ocean-luczay.jpg);*/
+    /*background-image: url(http://www.fradetfineart.com/beachoceanescape.JPG);*/
+    /* background-size: 100%; */
+    /* background-size: cover; */
+    /*background-repeat: no-repeat;*/
+    /*background-image: url(http://image.shutterstock.com/display_pic_with_logo/1266925/117455977/stock-vector-artistic-hand-drawing-white-sheep-in-the-ocean-117455977.jpg);*/
+    /*background-image: url(../img/wavesandfoam.png);*/
+    /*background-image: url(http://subtlepatterns.com/patterns/skulls.png);*/
+    background-repeat: repeat;
+    background-image: url(../img/subtle_white_feathers.png);
+}
