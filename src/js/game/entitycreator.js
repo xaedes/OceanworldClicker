@@ -27,6 +27,7 @@ define([
                 .add(uid)
                 .add(new Components.Value(value))
                 .add(new Components.Nearby(10))
+                .add(new Components.NearbyRefilledBySwimming())
                 .add(new Components.Name(name))
                 .add(new Components.Caption(caption))
                 .add(new Components.Refresh())
