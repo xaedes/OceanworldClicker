@@ -38,14 +38,17 @@ define([
             }
             var html=sp.sprintf(""
                 +"<tr id='%s' class='%s'>"
-                    +"<td><button>Gather</button></td>"
+                    +"<td><button class='gather'>Gather</button></td>"
                     +"<td><i class='fa'></i><span class='caption'></span></td>"
                     +"<td class='valuedisplay' id='%s'></td>"
                     +"<td></td>"
                 +"</tr>",containerid, cssClass.join(" "), injectid);  
             
             this.display.append(html);
-
+            $('#'+containerid+' button.gather').click(function () {
+                gather(node.entity, 1);
+            })
+            
             if(node.entity.has(Components.ValueDisplay)) {
                 node.entity.remove(Components.ValueDisplay);
             }

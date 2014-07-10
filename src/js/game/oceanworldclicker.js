@@ -13,6 +13,7 @@ define([
     'game/systems/logsystem',    
     'game/systems/valuedisplaysystem',    
     'game/systems/buildingmaterialdisplaysystem',    
+    'game/systems/gathersystem',    
 
     'game/systems/systempriorities',    
     'game/components/components',    
@@ -33,6 +34,7 @@ define([
     LogSystem,
     ValueDisplaySystem,
     BuildingMaterialDisplaySystem,
+    GatherSystem,
 
     SystemPriorities,
     Components,
@@ -59,6 +61,7 @@ define([
             this.engine.addSystem( new BuildingMaterialDisplaySystem(this.gamewrapper), SystemPriorities.only);
             this.engine.addSystem( new IntervalSystem(),                                SystemPriorities.only);
             this.engine.addSystem( new RateSystem(),                                    SystemPriorities.only);
+            this.engine.addSystem( new GatherSystem(),                                  SystemPriorities.only);
             this.engine.addSystem( new LogSystem(this.creator),                         SystemPriorities.only);
             this.engine.addSystem( new MaxSystem(),                                     SystemPriorities.contraints);
             this.engine.addSystem( new RefreshOnModifySystem(),                         SystemPriorities.refreshonmodify);
@@ -75,12 +78,19 @@ define([
             this.tickProvider = new TickProvider(null);
 
             // export to window
-            var self = this;
-            window.log = _.bind(self.log, this);
-            window.save = _.bind(self.save, this);
-            window.load = _.bind(self.load, this);
+            window.owc = this;
+            window.log = _.bind(this.log, this);
+            window.save = _.bind(this.save, this);
+            window.load = _.bind(this.load, this);
+            window.gather = _.bind(this.gather, this);
         },
-
+        gather: function (entity, amount) {
+            if(entity.has(Components.Gather)) {
+                amount += entity.get(Components.Gather).amount;
+                entity.remove(Components.Gather);
+            } 
+            entity.add(new Components.Gather(amount));
+        },
         save: function () {
             this.creator.createSaveOrder();
         },
