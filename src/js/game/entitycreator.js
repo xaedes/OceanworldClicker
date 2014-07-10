@@ -123,6 +123,12 @@ define([
                 ;
             this.game.addEntity(entity);
             return entity;            
+        },
+        createShip: function() {
+            var entity = new Ash.Entity()
+                ;
+            this.game.addEntity(entity);
+            return entity;
         }
 
     });

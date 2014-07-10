@@ -24,6 +24,7 @@ define([
     'game/components/cssclass',
     'game/components/nearby',
     'game/components/gather',
+    'game/components/swimaround',
     'ash'
 ], function (
     Refresh,
@@ -51,6 +52,7 @@ define([
     CSSClass,
     Nearby,
     Gather,
+    SwimAround,
     Ash
 ) {
     var Components = {
@@ -79,6 +81,7 @@ define([
         CSSClass: CSSClass,
         Nearby: Nearby,
         Gather: Gather,
+        SwimAround: SwimAround,
 
         getName: function(componentClass) {
             var pairs = _.pairs(this);

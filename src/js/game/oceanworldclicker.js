@@ -14,6 +14,7 @@ define([
     'game/systems/valuedisplaysystem',    
     'game/systems/buildingmaterialdisplaysystem',    
     'game/systems/gathersystem',    
+    'game/systems/swimaroundsystem',    
 
     'game/systems/systempriorities',    
     'game/components/components',    
@@ -35,6 +36,7 @@ define([
     ValueDisplaySystem,
     BuildingMaterialDisplaySystem,
     GatherSystem,
+    SwimAroundSystem,
 
     SystemPriorities,
     Components,
@@ -56,7 +58,9 @@ define([
             this.creator = new EntityCreator(this.engine);
 
             this.tick = this.creator.createTickGenerator(1.0);
+            this.tick.add(new Components.IntervalTick());
 
+            this.engine.addSystem( new SwimAroundSystem(),                              SystemPriorities.only);
             this.engine.addSystem( new ResourceDisplaySystem(this.gamewrapper),         SystemPriorities.only);
             this.engine.addSystem( new BuildingMaterialDisplaySystem(this.gamewrapper), SystemPriorities.only);
             this.engine.addSystem( new IntervalSystem(),                                SystemPriorities.only);
@@ -75,6 +79,8 @@ define([
             this.plastic = this.creator.createPlasticBuildingMaterial();
             this.planks = this.creator.createPlanksBuildingMaterial();
 
+            this.ship = this.creator.createShip();
+
             this.tickProvider = new TickProvider(null);
 
             // export to window
@@ -83,6 +89,11 @@ define([
             window.save = _.bind(this.save, this);
             window.load = _.bind(this.load, this);
             window.gather = _.bind(this.gather, this);
+            window.swim = _.bind(this.swim, this);
+        },
+        swim: function () {
+            if(!this.ship.has(Components.SwimAround))
+                this.ship.add(new Components.SwimAround());
         },
         gather: function (entity, amount) {
             if(entity.has(Components.Gather)) {
