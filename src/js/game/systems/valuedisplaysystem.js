@@ -82,7 +82,8 @@ define([
                container.find(".max").text(sprintf(node.display.format,node.entity.get(Components.Max).max));
             }
             if(node.entity.has(Components.Rate)){
-                container.find(".rate").text(sprintf("%.2f",node.entity.get(Components.Rate).rate));
+                var rate = node.entity.get(Components.Rate).rate;
+                container.find(".rate").text((rate < 0?"-":"+")+sprintf("%.2f",rate));
             }
 
             // remove Refresh flag to avoid unnecessary updates
