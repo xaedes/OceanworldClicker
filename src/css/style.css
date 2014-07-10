@@ -21,6 +21,9 @@ h1, h2 {
     font-weight: 400;
     margin-bottom: 0;
     letter-spacing: 1px;
+
+    /* make font smoother (especially for windows chrome) */
+    -webkit-text-stroke: 1px rgba(0,0,0,0.5);
 }
 
 h1 {
