@@ -76,6 +76,16 @@ define([
         ValueDisplay: ValueDisplay,
         CSSClass: CSSClass,
         Nearby: Nearby,
+        
+        getName: function(componentClass) {
+            var pairs = _.pairs(this);
+            for (var i = 0; i < pairs.length; i++) {
+                if(pairs[i][1] == componentClass) {
+                    return pairs[i][0];
+                }
+            };
+            return null;
+        }
     };
 
     return Components;

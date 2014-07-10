@@ -65,19 +65,20 @@ define([
 
             // for each StoreInSaveGameNode
             for(var node = this.storeInSaveGameNodes.head; node; node = node.next) {
+                storage[node.storeInSaveGame.unique_name] = {};
                 // for each component to store in this StoreInSaveGameNode
                 for (var i = 0; i < node.storeInSaveGame.list_of_components.length ; ++i) {
                     var Component = node.storeInSaveGame.list_of_components[i];
+                    var cName = Components.getName(Component);
                     if(node.entity.has(Component)) {
-                        storage[node.storeInSaveGame.unique_name] = node.entity.get(Component);
+                        storage[node.storeInSaveGame.unique_name][cName] = node.entity.get(Component);
                     } else {
-                        storage[node.storeInSaveGame.unique_name] = null;
+                        storage[node.storeInSaveGame.unique_name][cName] = null;
                     }
                 };
             }
 
             var serialize = _.compose(LZString.compressToBase64,JSON.stringify);
-
             localStorage.setItem('owc_savegame', serialize(storage));
         },
         load: function() {
@@ -91,10 +92,11 @@ define([
                 // for each component to store in this StoreInSaveGameNode
                 for (var i = 0; i < node.storeInSaveGame.list_of_components.length ; ++i) {
                     var ComponentClass = node.storeInSaveGame.list_of_components[i];
+                    var cName = Components.getName(ComponentClass);
                     if(node.entity.has(ComponentClass)) {
                         var component = node.entity.get(ComponentClass);
                         // copy all stored properties from storage[node.storeInSaveGame.unique_name] to component
-                        _.extend(component, storage[node.storeInSaveGame.unique_name]);
+                        _.extend(component, storage[node.storeInSaveGame.unique_name][cName]);
                         
                         // modified
                         if( ! node.entity.has(Components.Modified)) {
