@@ -23,6 +23,7 @@ define([
     'game/components/valuedisplay',
     'game/components/cssclass',
     'game/components/nearby',
+    'game/components/gather',
     'ash'
 ], function (
     Refresh,
@@ -49,6 +50,7 @@ define([
     ValueDisplay,
     CSSClass,
     Nearby,
+    Gather,
     Ash
 ) {
     var Components = {
@@ -76,7 +78,8 @@ define([
         ValueDisplay: ValueDisplay,
         CSSClass: CSSClass,
         Nearby: Nearby,
-        
+        Gather: Gather,
+
         getName: function(componentClass) {
             var pairs = _.pairs(this);
             for (var i = 0; i < pairs.length; i++) {
