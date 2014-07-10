@@ -22,6 +22,7 @@ define([
     'game/components/buildingmaterial',
     'game/components/valuedisplay',
     'game/components/cssclass',
+    'game/components/nearby',
     'ash'
 ], function (
     Refresh,
@@ -47,6 +48,7 @@ define([
     BuildingMaterial,
     ValueDisplay,
     CSSClass,
+    Nearby,
     Ash
 ) {
     var Components = {
@@ -73,6 +75,7 @@ define([
         BuildingMaterial: BuildingMaterial,
         ValueDisplay: ValueDisplay,
         CSSClass: CSSClass,
+        Nearby: Nearby,
     };
 
     return Components;

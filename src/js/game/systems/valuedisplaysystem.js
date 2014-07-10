@@ -48,6 +48,9 @@ define([
             if(node.entity.has(Components.Rate)){
                 inject.append("<span class='_rate'> (<span class='rate'></span>/s)</span>");
             }
+            if(node.entity.has(Components.Nearby)){
+                inject.append("<span class='_nearby'> from <span class='nearby'></span> nearby</span>");
+            }
 
             this.updateNode(node);
         },
@@ -65,6 +68,9 @@ define([
             }
             if(node.entity.has(Components.Rate)){
                 inject.find("._rate").remove();
+            }
+            if(node.entity.has(Components.Nearby)){
+                inject.find("._nearby").remove();
             }
         },
         updateNode: function (node) {
@@ -84,6 +90,9 @@ define([
             if(node.entity.has(Components.Rate)){
                 var rate = node.entity.get(Components.Rate).rate;
                 container.find(".rate").text((rate < 0?"-":"+")+sprintf("%.2f",rate));
+            }
+            if(node.entity.has(Components.Nearby)){
+                container.find(".nearby").text(sprintf(node.display.format,node.entity.get(Components.Nearby).nearby));
             }
 
             // remove Refresh flag to avoid unnecessary updates

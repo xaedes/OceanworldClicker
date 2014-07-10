@@ -26,11 +26,12 @@ define([
                 .add(new Components.BuildingMaterial())
                 .add(uid)
                 .add(new Components.Value(value))
+                .add(new Components.Nearby(0))
                 .add(new Components.Name(name))
                 .add(new Components.Caption(caption))
                 .add(new Components.Refresh())
                 .add(new Components.RefreshOnModify())
-                .add(new Components.StoreInSaveGame(name,[Components.Value]))
+                .add(new Components.StoreInSaveGame(name,[Components.Value, Components.Nearby]))
                 ;
             if(addEntity){
                 this.game.addEntity(entity);
