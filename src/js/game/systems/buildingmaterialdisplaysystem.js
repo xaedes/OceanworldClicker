@@ -45,10 +45,27 @@ define([
                 +"</tr>",containerid, cssClass.join(" "), injectid);  
             
             this.display.append(html);
-            $('#'+containerid+' button.gather').click(function () {
+            var gatherThis = function () {
                 gather(node.entity, 1);
-            })
-            
+            };
+            var mouseDownGatherIntervalHandle = null;
+            var startGathering = function () {
+                if(mouseDownGatherIntervalHandle==null) {
+                    mouseDownGatherIntervalHandle = setInterval(gatherThis,200);
+                }
+            };
+            var endGathering = function () {
+                if(mouseDownGatherIntervalHandle!==null) {
+                    clearInterval(mouseDownGatherIntervalHandle);
+                    mouseDownGatherIntervalHandle = null;
+                }
+            }
+            var buttonGather = $('#'+containerid+' button.gather');
+            buttonGather.click(gatherThis);
+            buttonGather.mousedown(startGathering);
+            buttonGather.mouseup(endGathering);
+            buttonGather.mouseleave(endGathering);
+
             if(node.entity.has(Components.ValueDisplay)) {
                 node.entity.remove(Components.ValueDisplay);
             }
