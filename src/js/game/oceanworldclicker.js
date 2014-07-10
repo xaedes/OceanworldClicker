@@ -1,6 +1,7 @@
 define([
     'ash',
     'jquery',
+    'underscore',
     'game/entitycreator',    
     'game/systems/resourcedisplaysystem',    
     'game/systems/cleanticksystem',    
@@ -17,6 +18,7 @@ define([
 ], function (
     Ash,
     $,
+    _,
     EntityCreator,
     ResourceDisplaySystem,
     CleanTickSystem,
@@ -88,13 +90,17 @@ define([
 
             // export to window
             var self = this;
-            window.log = function(msg) {
-                self.log(msg);
-            }
+            window.log = _.bind(self.log, this);
+            window.save = _.bind(self.save, this);
+            window.load = _.bind(self.load, this);
         },
 
         save: function () {
             this.creator.createSaveOrder();
+        },
+        
+        load: function () {
+            this.creator.createLoadOrder();
         },
 
         start: function () {
