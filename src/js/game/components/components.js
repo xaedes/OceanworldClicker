@@ -19,7 +19,9 @@ define([
     'game/components/saveorder',
     'game/components/logmessage',
     'game/components/loadorder',
+    'game/components/buildingmaterial',
     'game/components/valuedisplay',
+    'game/components/cssclass',
     'ash'
 ], function (
     Refresh,
@@ -42,7 +44,9 @@ define([
     SaveOrder,
     LogMessage,
     LoadOrder,
+    BuildingMaterial,
     ValueDisplay,
+    CSSClass,
     Ash
 ) {
     var Components = {
@@ -66,7 +70,9 @@ define([
         SaveOrder: SaveOrder,
         LogMessage: LogMessage,
         LoadOrder: LoadOrder,
+        BuildingMaterial: BuildingMaterial,
         ValueDisplay: ValueDisplay,
+        CSSClass: CSSClass,
     };
 
     return Components;

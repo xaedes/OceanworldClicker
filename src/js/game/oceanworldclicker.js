@@ -12,6 +12,8 @@ define([
     'game/systems/refreshonmodifysystem',    
     'game/systems/logsystem',    
     'game/systems/valuedisplaysystem',    
+    'game/systems/buildingmaterialdisplaysystem',    
+
     'game/systems/systempriorities',    
     'game/components/components',    
     'brejep/tickprovider',
@@ -30,6 +32,8 @@ define([
     RefreshOnModifySystem,
     LogSystem,
     ValueDisplaySystem,
+    BuildingMaterialDisplaySystem,
+
     SystemPriorities,
     Components,
     TickProvider,
@@ -51,19 +55,22 @@ define([
 
             this.tick = this.creator.createTickGenerator(1.0);
 
-            this.engine.addSystem( new ResourceDisplaySystem(this.gamewrapper), SystemPriorities.only);
-            this.engine.addSystem( new IntervalSystem(),                        SystemPriorities.only);
-            this.engine.addSystem( new RateSystem(),                            SystemPriorities.only);
-            this.engine.addSystem( new LogSystem(this.creator),                 SystemPriorities.only);
-            this.engine.addSystem( new MaxSystem(),                             SystemPriorities.contraints);
-            this.engine.addSystem( new RefreshOnModifySystem(),                 SystemPriorities.refreshonmodify);
-            this.engine.addSystem( new ValueDisplaySystem(),                    SystemPriorities.display);
-            this.engine.addSystem( new CleanTickSystem(),                       SystemPriorities.cleantick);
-            this.engine.addSystem( new SaveGameSystem(this.creator),            SystemPriorities.cleantick);
+            this.engine.addSystem( new ResourceDisplaySystem(this.gamewrapper),         SystemPriorities.only);
+            this.engine.addSystem( new BuildingMaterialDisplaySystem(this.gamewrapper), SystemPriorities.only);
+            this.engine.addSystem( new IntervalSystem(),                                SystemPriorities.only);
+            this.engine.addSystem( new RateSystem(),                                    SystemPriorities.only);
+            this.engine.addSystem( new LogSystem(this.creator),                         SystemPriorities.only);
+            this.engine.addSystem( new MaxSystem(),                                     SystemPriorities.contraints);
+            this.engine.addSystem( new RefreshOnModifySystem(),                         SystemPriorities.refreshonmodify);
+            this.engine.addSystem( new ValueDisplaySystem(),                            SystemPriorities.display);
+            this.engine.addSystem( new CleanTickSystem(),                               SystemPriorities.cleantick);
+            this.engine.addSystem( new SaveGameSystem(this.creator),                    SystemPriorities.cleantick);
 
             this.water = this.creator.createWaterResource();
             this.population = this.creator.createPopulationResource();
             this.sight = this.creator.createSightResource();
+            this.plastic = this.creator.createPlasticBuildingMaterial();
+            this.planks = this.creator.createPlanksBuildingMaterial();
 
             this.tickProvider = new TickProvider(null);
 

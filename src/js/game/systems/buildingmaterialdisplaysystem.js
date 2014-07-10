@@ -1,24 +1,23 @@
 define([
     'ash', 
-    'game/nodes/resourcedisplaynode', 
+    'game/nodes/buildingmaterialdisplaynode', 
     'game/components/components',
     'jquery', 
     'sprintf'
-], function (Ash, ResourceDisplayNode, Components, $, sp) {
-    var ResourceDisplaySystem = Ash.System.extend({
+], function (Ash, BuildingMaterialDisplayNode, Components, $, sp) {
+    var BuildingMaterialDisplaySystem = Ash.System.extend({
         gamewrapper: null,
         display: null,
         nodes: null,
 
         constructor: function (gamewrapper) {
             this.gamewrapper = gamewrapper;
-            this.display = gamewrapper.find("#resourcedisplay");
+            this.display = gamewrapper.find("#buildingmaterialdisplay");
             return this;
         },
 
         addToEngine: function (engine) {
-
-            this.nodes = engine.getNodeList(ResourceDisplayNode);
+            this.nodes = engine.getNodeList(BuildingMaterialDisplayNode);
             for(var node = this.nodes.head; node; node = node.next) {
                 this.addToDisplay(node);
             }
@@ -31,13 +30,19 @@ define([
         },
 
         addToDisplay: function (node) {
-            var containerid = sprintf("resource_%d", node.uid.uid);
+            var containerid = sprintf("buildingmaterialdisplay_%d", node.uid.uid);
             var injectid = sprintf("valuedisplay_%d", node.uid.uid);
+            var cssClass = [];
+            if(node.entity.has(Components.CSSClass)) {
+                cssClass.push(node.entity.get(Components.CSSClass).cssClass);
+            }
             var html=sp.sprintf(""
-                +"<tr id='%s'>"
-                    +"<td class='caption'></td>"
+                +"<tr id='%s' class='%s'>"
+                    +"<td><button>Gather</button></td>"
+                    +"<td><i class='fa'></i><span class='caption'></span></td>"
                     +"<td class='valuedisplay' id='%s'></td>"
-                +"</tr>",containerid, injectid);  
+                    +"<td></td>"
+                +"</tr>",containerid, cssClass.join(" "), injectid);  
             
             this.display.append(html);
 
@@ -48,11 +53,11 @@ define([
         },
 
         removeFromDisplay: function (node) {
-            var containerid = sprintf("resource_%d", node.uid.uid);
+            var containerid = sprintf("buildingmaterialdisplay_%d", node.uid.uid);
             this.display.find("#"+containerid).remove();
         },
 
     });
 
-    return ResourceDisplaySystem;
+    return BuildingMaterialDisplaySystem;
 });
