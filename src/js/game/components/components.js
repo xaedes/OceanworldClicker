@@ -19,6 +19,7 @@ define([
     'game/components/saveorder',
     'game/components/logmessage',
     'game/components/loadorder',
+    'game/components/valuedisplay',
     'ash'
 ], function (
     Refresh,
@@ -41,6 +42,7 @@ define([
     SaveOrder,
     LogMessage,
     LoadOrder,
+    ValueDisplay,
     Ash
 ) {
     var Components = {
@@ -64,6 +66,7 @@ define([
         SaveOrder: SaveOrder,
         LogMessage: LogMessage,
         LoadOrder: LoadOrder,
+        ValueDisplay: ValueDisplay,
     };
 
     return Components;

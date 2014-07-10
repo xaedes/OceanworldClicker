@@ -11,6 +11,7 @@ define([
     'game/systems/savegamesystem',    
     'game/systems/refreshonmodifysystem',    
     'game/systems/logsystem',    
+    'game/systems/valuedisplaysystem',    
     'game/systems/systempriorities',    
     'game/components/components',    
     'brejep/tickprovider',
@@ -28,6 +29,7 @@ define([
     SaveGameSystem,
     RefreshOnModifySystem,
     LogSystem,
+    ValueDisplaySystem,
     SystemPriorities,
     Components,
     TickProvider,
@@ -55,6 +57,7 @@ define([
             this.engine.addSystem( new LogSystem(this.creator),                 SystemPriorities.only);
             this.engine.addSystem( new MaxSystem(),                             SystemPriorities.contraints);
             this.engine.addSystem( new RefreshOnModifySystem(),                 SystemPriorities.refreshonmodify);
+            this.engine.addSystem( new ValueDisplaySystem(),                    SystemPriorities.display);
             this.engine.addSystem( new CleanTickSystem(),                       SystemPriorities.cleantick);
             this.engine.addSystem( new SaveGameSystem(this.creator),            SystemPriorities.cleantick);
 

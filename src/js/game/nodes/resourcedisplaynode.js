@@ -1,11 +1,15 @@
 define([
-    'ash', 
-    'game/nodes/resourcedisplayschema'
+    'ash',
+    'game/components/components'       
 ], function (
-    Ash, 
-    ResourceDisplaySchema
+    Ash,
+    Components
 ) {
-    var ResourceDisplayNode = Ash.Node.create(ResourceDisplaySchema);
+    var ResourceDisplayNode = Ash.Node.create({
+        resource : Components.Resource,
+        display : Components.Display,
+        uid : Components.UID
+    });
 
     return ResourceDisplayNode;
 });

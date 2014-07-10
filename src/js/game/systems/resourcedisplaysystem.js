@@ -1,16 +1,14 @@
 define([
     'ash', 
     'game/nodes/resourcedisplaynode', 
-    'game/nodes/resourcedisplayrefreshnode', 
     'game/components/components',
     'jquery', 
     'sprintf'
-], function (Ash, ResourceDisplayNode, ResourceDisplayRefreshNode, Components, $, sp) {
+], function (Ash, ResourceDisplayNode, Components, $, sp) {
     var ResourceDisplaySystem = Ash.System.extend({
         gamewrapper: null,
         resourcedisplay: null,
         nodes: null,
-        nodesRefresh: null,
 
         constructor: function (gamewrapper) {
             this.gamewrapper = gamewrapper;
@@ -26,13 +24,6 @@ define([
             }
             this.nodes.nodeAdded.add(this.addToDisplay, this);
             this.nodes.nodeRemoved.add(this.removeFromDisplay, this);
-
-            this.nodesRefresh = engine.getNodeList(ResourceDisplayRefreshNode);
-            for(var node = this.nodesRefresh.head; node; node = node.next) {
-                this.updateNode(node);
-            }
-
-            this.nodesRefresh.nodeAdded.add(this.updateNode, this); // immediate update
         },
 
         removeFromEngine: function (engine) {
@@ -40,66 +31,27 @@ define([
         },
 
         addToDisplay: function (node) {
-            var html = "";
-            var valuedisplayhtml = "<td class='valuedisplay'>";
-            if(node.entity.has(Components.Prepend)){
-                valuedisplayhtml+="<span class='prepend'></span>";
-            }
-            if(node.entity.has(Components.Value)){
-                valuedisplayhtml+="<span class='value'></span>";
-            }
-            if(node.entity.has(Components.Max)){
-                valuedisplayhtml+=" / <span class='max'></span>";
-            }
-            if(node.entity.has(Components.Rate)){
-                valuedisplayhtml+=" (<span class='rate'></span>/s)";
-            }
-            valuedisplayhtml+="</td>";
-            html+=sp.sprintf("<tr id='resource_%d'>",node.uid.uid)
+            var containerid = sprintf("resource_%d", node.uid.uid);
+            var injectid = sprintf("valuedisplay_%d", node.uid.uid);
+            var html=sp.sprintf(""
+                +"<tr id='%s'>"
                     +"<td class='caption'></td>"
-                    +valuedisplayhtml
-                +"</tr>";  
+                    +"<td class='valuedisplay' id='%s'></td>"
+                +"</tr>",containerid, injectid);  
             
             this.resourcedisplay.append(html);
 
-            this.updateNode(node);
+            if(node.entity.has(Components.ValueDisplay)) {
+                node.entity.remove(Components.ValueDisplay);
+            }
+            node.entity.add(new Components.ValueDisplay(containerid, injectid));
         },
 
         removeFromDisplay: function (node) {
-            // todo?
+            var containerid = sprintf("resource_%d", node.uid.uid);
+            this.resourcedisplay.find("#"+containerid).remove();
         },
 
-        updateNode: function(node) {
-            var tr = this.resourcedisplay.find("#resource_"+node.uid.uid)
-            if(node.entity.has(Components.Prepend)){
-                tr.find(".prepend").text(sprintf("%s",node.entity.get(Components.Prepend).prepend));
-            }
-            if(node.entity.has(Components.Caption)){
-                tr.find(".caption").text(sprintf("%s",node.entity.get(Components.Caption).caption));
-            }
-            if(node.entity.has(Components.Value)){
-                tr.find(".value").text(sprintf(node.display.format,node.entity.get(Components.Value).value));
-            }
-            if(node.entity.has(Components.Max)){
-               tr.find(".max").text(sprintf(node.display.format,node.entity.get(Components.Max).max));
-            }
-            if(node.entity.has(Components.Rate)){
-                tr.find(".rate").text(sprintf("%.2f",node.entity.get(Components.Rate).rate));
-            }
-
-            // remove Refresh flag to avoid unnecessary updates
-            if(node.entity.has(Components.Refresh)) {
-                node.entity.remove(Components.Refresh);
-            }
-        },
-
-        update: function (time) {
-            var node;
-
-            for (node = this.nodesRefresh.head; node; node = node.next) {
-                this.updateNode(node);
-            }
-        }
     });
 
     return ResourceDisplaySystem;
