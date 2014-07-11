@@ -94,6 +94,32 @@ define([
             window.load = _.bind(this.load, this);
             window.gather = _.bind(this.gather, this);
             window.swim = _.bind(this.swim, this);
+            window.modified = _.bind(this.modified, this);
+            window.getOrAdd = _.bind(this.getOrAdd, this);
+        },
+        construct: function(constructor, args) {
+            //http://stackoverflow.com/a/1608546/798588
+            function F() {
+                return constructor.apply(this, args);
+            }
+            F.prototype = constructor.prototype;
+            return new F();
+        },
+        getOrAdd: function (entity, ComponentClass) {
+            var args = arguments.slice(2);
+            var component = null;
+            if( ! entity.has(Components.Modified)){
+                component = this.construct(ComponentClass,args);
+                entity.add(component);
+            } else {
+                component = entity.get(Components.Modified);
+            }
+            return component;
+        },
+        modified: function (entity) {
+            if( ! entity.has(Components.Modified)){
+                entity.add(new Components.Modified());
+            }
         },
         swim: function () {
             if(!this.ship.has(Components.SwimAround))
