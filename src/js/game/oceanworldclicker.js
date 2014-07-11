@@ -16,6 +16,7 @@ define([
     'game/systems/gathersystem',    
     'game/systems/swimaroundsystem',    
     'game/systems/sightsystem',    
+    'game/systems/lifetimesystem',    
 
     'game/systems/systempriorities',    
     'game/components/components',    
@@ -39,6 +40,7 @@ define([
     GatherSystem,
     SwimAroundSystem,
     SightSystem,
+    LifetimeSystem,
 
     SystemPriorities,
     Components,
@@ -61,7 +63,7 @@ define([
 
             this.tick = this.creator.createTickGenerator(1.0);
             this.tick.add(new Components.IntervalTick());
-            
+
             this.water = this.creator.createWaterResource();
             this.population = this.creator.createPopulationResource();
             this.sight = this.creator.createSightResource();
@@ -70,6 +72,7 @@ define([
 
             this.ship = this.creator.createShip();
 
+            this.engine.addSystem( new LifetimeSystem(this.creator),                    SystemPriorities.only);
             this.engine.addSystem( new SightSystem(),                                   SystemPriorities.only);
             this.engine.addSystem( new ResourceDisplaySystem(this.gamewrapper),         SystemPriorities.only);
             this.engine.addSystem( new BuildingMaterialDisplaySystem(this.gamewrapper), SystemPriorities.only);
