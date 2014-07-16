@@ -17,6 +17,7 @@ define([
     'game/systems/swimaroundsystem',    
     'game/systems/sightsystem',    
     'game/systems/lifetimesystem',    
+    'game/systems/highlightcomponentsystem',    
 
     'game/systems/systempriorities',    
     'game/components/components',    
@@ -41,6 +42,7 @@ define([
     SwimAroundSystem,
     SightSystem,
     LifetimeSystem,
+    HighlightComponentSystem,
 
     SystemPriorities,
     Components,
@@ -73,12 +75,13 @@ define([
             this.ship = this.creator.createShip();
 
             this.engine.addSystem( new LifetimeSystem(this.creator),                    SystemPriorities.only);
+            this.engine.addSystem( new HighlightComponentSystem(),                      SystemPriorities.only);
             this.engine.addSystem( new SightSystem(),                                   SystemPriorities.only);
             this.engine.addSystem( new ResourceDisplaySystem(this.gamewrapper),         SystemPriorities.only);
             this.engine.addSystem( new BuildingMaterialDisplaySystem(this.gamewrapper), SystemPriorities.only);
             this.engine.addSystem( new IntervalSystem(),                                SystemPriorities.only);
             this.engine.addSystem( new RateSystem(),                                    SystemPriorities.only);
-            this.engine.addSystem( new GatherSystem(),                                  SystemPriorities.only);
+            this.engine.addSystem( new GatherSystem(this.creator),                      SystemPriorities.only);
             this.engine.addSystem( new LogSystem(this.creator),                         SystemPriorities.only);
             this.engine.addSystem( new MaxSystem(),                                     SystemPriorities.contraints);
             this.engine.addSystem( new RefreshOnModifySystem(),                         SystemPriorities.refreshonmodify);

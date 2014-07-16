@@ -6,9 +6,11 @@ define([
     'sprintf'
 ], function (Ash, GatherNode, Components, $, sp) {
     var GatherSystem = Ash.System.extend({
+        creator: null,
         nodes: null,
 
-        constructor: function () {
+        constructor: function (creator) {
+            this.creator=creator;
             return this;
         },
 
@@ -28,11 +30,27 @@ define([
 
         addNode: function (node) {
             var amount = Math.min(node.gather.amount, node.nearby.nearby);
+            if(node.entity.has(Components.Max)){
+                var maxIncrement = node.entity.get(Components.Max).max - node.value.value;
+                if(amount>maxIncrement) {
+                    amount = maxIncrement;
+                    // if(node.entity.hasOwnProperty("highlighter")) {
+                    //     var highlighter = node.entity.highlighter;
+                    //     if(highlighter) {
+                            
+                    //     }
+                    // } else {
+                        // node.entity.highlighter = 
+                        this.creator.createHighlightComponent(node.entity, Components.Max)
+                            .add(new Components.Lifetime(0.1));
+                    // }
+                }
+            }
             node.value.value += amount;
             node.nearby.nearby -= amount;
-            if( ! node.entity.has(Components.Modified)) {
-                node.entity.add(new Components.Modified());
-            }
+            modified(node.entity);
+
+
             node.entity.remove(Components.Gather);
         },
 

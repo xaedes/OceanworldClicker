@@ -35,7 +35,7 @@ define([
             var injectid = sprintf("valuedisplay_%d", node.uid.uid);
             var html=sp.sprintf(""
                 +"<tr id='%s'>"
-                    +"<td class='caption'></td>"
+                    +"<td class='Caption'></td>"
                     +"<td class='valuedisplay' id='%s'></td>"
                 +"</tr>",containerid, injectid);  
             

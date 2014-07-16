@@ -32,9 +32,10 @@ define([
             if(node.lifetime._timeout_handle) {
                 clearTimeout(node.lifetime._timeout_handle);
             }        
+            var self = this;
             node.lifetime._timeout_handle = setTimeout(function () {
                 node.lifetime._timeout_handle = null;
-                this.creator.destroyEntity(node.entity);
+                self.creator.destroyEntity(node.entity);
             },node.lifetime.seconds*1000);    
         },
 

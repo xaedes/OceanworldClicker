@@ -37,19 +37,19 @@ define([
         addNode: function (node) {
             var inject = $("#"+node.valueDisplay.htmlInjectID);
             if(node.entity.has(Components.Prepend)){
-                inject.append("<span class='prepend'></span>");
+                inject.append("<span class='Prepend'></span>");
             }
             if(node.entity.has(Components.Value)){
-                inject.append("<span class='value'></span>");
+                inject.append("<span class='Value Highlightable'></span>");
             }
             if(node.entity.has(Components.Max)){
-                inject.append("<span class='_max'> / <span class='max'></span></span>");
+                inject.append("<span class='_Max'> / <span class='Max Highlightable'></span></span>");
             }
             if(node.entity.has(Components.Rate)){
-                inject.append("<span class='_rate'> (<span class='rate'></span>/s)</span>");
+                inject.append("<span class='_Rate'> (<span class='Rate Highlightable'></span>/s)</span>");
             }
             if(node.entity.has(Components.Nearby)){
-                inject.append("<span class='_nearby'> from <span class='nearby'></span> nearby</span>");
+                inject.append("<span class='_Nearby'> from <span class='Nearby Highlightable'></span> nearby</span>");
             }
 
             this.updateNode(node);
@@ -58,41 +58,41 @@ define([
         removeNode: function (node) {
             var inject = $("#"+node.valueDisplay.htmlInjectID);
             if(node.entity.has(Components.Prepend)){
-                inject.find(".prepend").remove();
+                inject.find(".Prepend").remove();
             }
             if(node.entity.has(Components.Value)){
-                inject.find(".value").remove();
+                inject.find(".Value").remove();
             }
             if(node.entity.has(Components.Max)){
-                inject.find("._max").remove();
+                inject.find("._Max").remove();
             }
             if(node.entity.has(Components.Rate)){
-                inject.find("._rate").remove();
+                inject.find("._Rate").remove();
             }
             if(node.entity.has(Components.Nearby)){
-                inject.find("._nearby").remove();
+                inject.find("._Nearby").remove();
             }
         },
         updateNode: function (node) {
             var container = $("#"+node.valueDisplay.htmlContainerID);
             if(node.entity.has(Components.Prepend)){
-                container.find(".prepend").text(sprintf("%s",node.entity.get(Components.Prepend).prepend));
+                container.find(".Prepend").text(sprintf("%s",node.entity.get(Components.Prepend).prepend));
             }
             if(node.entity.has(Components.Caption)){
-                container.find(".caption").text(sprintf("%s",node.entity.get(Components.Caption).caption));
+                container.find(".Caption").text(sprintf("%s",node.entity.get(Components.Caption).caption));
             }
             if(node.entity.has(Components.Value)){
-                container.find(".value").text(sprintf(node.display.format,node.entity.get(Components.Value).value));
+                container.find(".Value").text(sprintf(node.display.format,node.entity.get(Components.Value).value));
             }
             if(node.entity.has(Components.Max)){
-               container.find(".max").text(sprintf(node.display.format,node.entity.get(Components.Max).max));
+               container.find(".Max").text(sprintf(node.display.format,node.entity.get(Components.Max).max));
             }
             if(node.entity.has(Components.Rate)){
                 var rate = node.entity.get(Components.Rate).rate;
-                container.find(".rate").text((rate < 0?"-":"+")+sprintf("%.2f",rate));
+                container.find(".Rate").text((rate < 0?"-":"+")+sprintf("%.2f",rate));
             }
             if(node.entity.has(Components.Nearby)){
-                container.find(".nearby").text(sprintf(node.display.format,node.entity.get(Components.Nearby).nearby));
+                container.find(".Nearby").text(sprintf(node.display.format,node.entity.get(Components.Nearby).nearby));
             }
 
             // remove Refresh flag to avoid unnecessary updates

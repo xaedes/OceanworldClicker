@@ -132,6 +132,13 @@ define([
                 ;
             this.game.addEntity(entity);
             return entity;
+        },
+        createHighlightComponent: function(entity,ComponentClass) {
+            var entity = new Ash.Entity()
+                .add(new Components.HighlightComponent(entity,ComponentClass))
+                ;
+            this.game.addEntity(entity);
+            return entity;
         }
 
     });

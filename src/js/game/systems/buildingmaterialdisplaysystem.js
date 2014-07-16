@@ -39,7 +39,7 @@ define([
             var html=sp.sprintf(""
                 +"<tr id='%s' class='%s'>"
                     +"<td><button class='gather'>Gather</button></td>"
-                    +"<td><i class='fa'></i><span class='caption'></span></td>"
+                    +"<td><i class='fa'></i><span class='Caption'></span></td>"
                     +"<td class='valuedisplay' id='%s'></td>"
                     +"<td></td>"
                 +"</tr>",containerid, cssClass.join(" "), injectid);  
@@ -70,6 +70,11 @@ define([
                 node.entity.remove(Components.ValueDisplay);
             }
             node.entity.add(new Components.ValueDisplay(containerid, injectid));
+            if(node.entity.has(Components.HTMLContainerID)) {
+                node.entity.remove(Components.HTMLContainerID);
+                log("Had to remove old HTMLContainerID");
+            }
+            node.entity.add(new Components.HTMLContainerID(containerid));
         },
 
         removeFromDisplay: function (node) {
