@@ -4,8 +4,13 @@
     <title>OceanWorldClicker</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="./fonts/ComicNeue/comicneue.css">
+    <link rel="stylesheet" type="text/css" href="./fonts/indieflower/indieflower.css">
     <link rel="stylesheet" href="./fonts/fontawesome/font-awesome.css" type="text/css" charset="utf-8" />
-    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <!-- <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'> -->
+    <!-- <link href="//fonts.googleapis.com/css?family=Shadows+Into+Light:400" rel="stylesheet" type="text/css"> -->
+
+    <!-- <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'> -->
     <script type="text/javascript" src="js/dist/sprintf.js/src/sprintf.js"></script>
     <script type="text/javascript" src="js/dist/underscore/underscore.js"></script>
 
@@ -22,6 +27,8 @@
     </script>
     </head>
 <body>
+	<div id="background">
+    </div>
     <table style="width:100%;"><tr>
     <td width="50%" valign="top">
         <h1>OceanWorld</h1> 
@@ -50,7 +57,7 @@
             <button onclick="swim(); displayAll();" id="swim")>Swim around</button> 
             <span id="dialog_options">
             <button onclick="state.dialog.optionA();" id="optionA" style="display: None;">A</button>
-            <button onclick="dismiss()" id="dismiss">dismiss</button>
+            <button onclick="state.dialog.dismiss()" id="dismiss">dismiss</button>
             </span>
         </div>
         <h2>Building Materials</h2>
@@ -92,7 +99,7 @@
                 <td><button onclick="build(state.space.enlargements.build,1); apply_calculate(state.space); apply_calculate(state.space.available); displayAll();") id="buildShipEnlargements">Build</button></td>
                 <td>Ship Enlargements: </td>
                 <td><span id="shipEnlargements"></span></td>
-                <td><span id="shipEnlargementsCost"></span>: +<span id="shipEnlargementsEffect"></span> space</td>
+                <td><span id="shipEnlargementsCost"></span></td>
             </tr>
             <tr>
                 <td><button onclick="build(state.population.cabin.build,1); apply_calculate(state.population.max); apply_calculate(state.population.unemployed); apply_calculate(state.space.available); displayAll();") id="buildCabin">Build</button></td>

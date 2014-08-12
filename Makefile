@@ -4,8 +4,8 @@ include ./Config.mk
 do_nothing:
 
 deploy:
-	scp -r src/* $(DEPLOY_DEST)
-
+	# scp -r src/* $(DEPLOY_DEST)/
+	rsync -auhvze ssh src/ $(DEPLOY_DEST)
 server: 
 	# sleep 1 && xdg-open "http://localhost:8082" &
 	http-server src -p 8082 -c-1 # sudo npm install http-server -g

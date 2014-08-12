@@ -24,10 +24,29 @@ function setSignedFloat(id,value) {
 function setInt(id,value) {
     setInnerHTML(id,sprintf("%d",value));
 }
-function setCost(id,build,ignore) {
+function setCost(id,build,building) {
     var s = _.chain(build)
-        .filter(function (a) { return a.variable !== ignore; })
-        .map(function(a) {return sprintf("%d %s",-a.amount,a.variable.name);})
+        // filter out space generating buildings
+        .filter(function (a) { return !((a.variable == building) && (getValue(a.variable) < 0)); }) 
+        .map(function(a) {
+            var inner = "";
+            var class_ = "";
+            if((a.variable == building)&&(a.variable.hasOwnProperty("size"))) {
+                var spaceNecessary = -a.amount * getValue(a.variable.size);
+                // check if enough space is available
+                class_ = getValue(state.space.available) >= -spaceNecessary 
+                    ? "ok" : "resources_low";
+                // display space as cost
+                inner = sprintf("%s%d space",(spaceNecessary < 0?'-':'+'),Math.abs(spaceNecessary));
+            } else {
+                var resourceNecessary = -a.amount;
+                // check if enough of the resource is available
+                class_ = (getValue(a.variable) >= resourceNecessary) ? "ok" : "resources_low";
+                // display resource cost
+                inner = sprintf("%d %s",resourceNecessary,a.variable.name);
+            }
+            return sprintf("<span class='%s'>%s</span>",class_,inner);
+        })
         .value()
         .join(", ");
     setInnerHTML(id,s);
@@ -83,7 +102,7 @@ function defineDefaultData(state) {
 
     state.sight.lookout = {};
     state.sight.lookout.current = 0;
-    state.sight.lookout.effect = 10;
+    state.sight.lookout.effect = 5;
     state.sight.lookout.min = 0;
     state.sight.lookout.max = {};
     state.sight.lookout.max.current = 0;
@@ -171,7 +190,7 @@ function defineDefaultData(state) {
     state.water.reservoirs.size = 1;
 
     state.dialog = {};
-
+    
 
     return state;
 }
@@ -279,6 +298,11 @@ function defineCalculations(state) {
 function defineNonData(state) {
     defineBuilds(state);
     defineCalculations(state);
+
+    state.dialog.dismiss = function() {
+        clearDialog();
+        setHidden('dialog_options');
+    };
 
     return state;
 }
@@ -455,7 +479,6 @@ function displayWaterReservoirs() {
 function displayShipEnlargements() {
     setClickableBuild("buildShipEnlargements", state.space.enlargements, 1, state.space.available);
     setInt("shipEnlargements", getValue(state.space.enlargements));
-    setInt("shipEnlargementsEffect", -getValue(state.space.enlargements.size));
     setCost("shipEnlargementsCost", state.space.enlargements.build, state.space.enlargements);
 }
 function displayCabins() {
@@ -584,7 +607,8 @@ function swim() {
     apply_calculate_suffix(state.planks.nearby,"swim");
 
     clearDialog();
-    dismiss()
+    setHidden("optionA");
+    state.dialog.dismiss();
     if(Math.random() < state.population.findSurvivorProbability) {
         log("Found new survivor!");
         if(getValue(state.population.max)-getValue(state.population) > 0){
@@ -600,6 +624,14 @@ function swim() {
                 setVisibleInline("optionA");
                 setInnerHTML("optionA","Ask him about it.");
                 setDisabled("swim");
+
+                var oldDismiss = state.dialog.dismiss;
+                state.dialog.dismiss = function() {
+                    setEnabled("swim");
+                    oldDismiss();
+
+                    state.dialog.dismiss = oldDismiss;
+                };
             }
         } else {
             dialog("Found new survivor!");
