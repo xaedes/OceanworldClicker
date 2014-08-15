@@ -39,7 +39,7 @@ h2 {
 }
 
 #log {
-    border: 1px solid black;
+    border: 0px solid black;
     padding: 5px;
     width: 99%;
     height: 400px;
@@ -71,8 +71,8 @@ h2 {
     text-align: left;
 }
 
-#resetGame {
-    float: right;
+#saveGame {
+    float:left;
 }
 
 #the_ocean {
